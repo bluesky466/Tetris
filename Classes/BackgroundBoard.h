@@ -4,19 +4,38 @@
 #include "cocos2d.h"
 #include "GlobalDefine.h"
 #include "Tetromino.h"
+#include "Block.h"
 
 USING_NS_CC;
 
-class BackgroundBoard : public CCNode
+class BackgroundBoard : public CCNode,public CCTouchDelegate
 {
 public:
-	bool init(float blockSize);
 	void curTetrominoMove(CCNode*);
-	static BackgroundBoard* create(float blockSize);
+	void setActionDistance(float actionDistance) {m_actionDistance = actionDistance;}
+
+	virtual bool init(float blockSize,char* fnBlockTex);
+	virtual void onEnter();
+    virtual void onExit();
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
+
+	static BackgroundBoard* create(float blockSize,char* fnBlockTex);
 private:
-	int m_blockSize;
-	int m_bgInfo[BACKGROUND_ROW];
+	char* m_fnBlockTex;
+	float m_dropDur;
+	float m_touchPosY;
+	float m_actionDistance;
+	bool  m_bAccAction;
+	bool  m_bGameOver;
+	int   m_blockSize;
+	int   m_bgInfo[BACKGROUND_ROW];
+	CCNode* m_blockSprRow[BACKGROUND_ROW];
 	Tetromino* m_curTetromino;
+
+	void addNewTetromino();
+	bool addToBg();
+	bool clearLine();
 };
 
 #endif

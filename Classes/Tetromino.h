@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "GlobalDefine.h"
+#include "Block.h"
 
 USING_NS_CC;
 //原点在右下角,数组的第零行在最底下
@@ -15,13 +16,13 @@ public:
 	bool move(bool bLeft,const int* bgInfo);  //左右移动
 	bool drop(const int* bgInfo);             //下降
 
-	void addToBg(int* bgInfo);
-
 	bool setCol(int c,int* bgInfo);
 	bool setRow(int r,int* bgInfo);
 
 	int getCol()       {return m_col;}
 	int getRow()       {return m_row;}
+	int getRotate()    {return m_rotate;}
+	int getShape()     {return m_shape;}
 	
 	bool init(int shape,float blockSize,const char* fnBlockTexture);
 
@@ -33,7 +34,7 @@ protected:
 	int   m_rotate;
 	int   m_shape;
 	float m_blockSize;
-	CCSprite* m_blockSprite[4];
+	Block* m_blockSprite[4];
 
 	void setBlockSprPos();
 	bool isCollision(int col,int row,int rotate,const int* bgInfo);
