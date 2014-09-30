@@ -1,33 +1,52 @@
+#ifndef  _TETROMINO_H_
+#define  _TETROMINO_H_
+
 #include "cocos2d.h"
+#include "GlobalDefine.h"
 
 USING_NS_CC;
-
+//原点在右下角,数组的第零行在最底下
 class Tetromino : public CCNode
 {
 public:
 	Tetromino();
 
-	bool Rotate(bool bClockwise,int* bgInfo); //旋转
-	bool move(bool bLeft,int* bgInfo);        //左右移动
-	bool drop(int* bgInfo);                   //下降
+	bool clockwiseRotate(const int* bgInfo);  //顺时针旋转
+	bool move(bool bLeft,const int* bgInfo);  //左右移动
+	bool drop(const int* bgInfo);             //下降
 
-	bool init(int shape[4][4],float dropDistance,char* fnBlockTexture);
+	void addToBg(int* bgInfo);
 
-	static Tetromino* create(int shape[4][4],float dropDistance,char* fnBlockTexture);
+	bool setCol(int c,int* bgInfo);
+	bool setRow(int r,int* bgInfo);
+
+	int getCol()       {return m_col;}
+	int getRow()       {return m_row;}
+	
+	bool init(int shape,float blockSize,const char* fnBlockTexture);
+
+	static Tetromino* create(int shape,float blockSize,const char* fnBlockTexture);
 
 protected:
-	int   m_posX;
-	int   m_posY;
+	int   m_col;
+	int   m_row;
 	int   m_rotate;
-	int   m_shape[4][4];
-	float m_dropDistance;
+	int   m_shape;
+	float m_blockSize;
 	CCSprite* m_blockSprite[4];
+
+	void setBlockSprPos();
+	bool isCollision(int col,int row,int rotate,const int* bgInfo);
 };
 
 inline Tetromino::Tetromino():
-m_posX(0),
-m_posY(0),
+m_col(0),
+m_row(BACKGROUND_ROW),
 m_rotate(0),
-m_dropDistance(0.0f)
+m_shape(0),
+m_blockSize(0.0f)
 {
 }
+
+
+#endif

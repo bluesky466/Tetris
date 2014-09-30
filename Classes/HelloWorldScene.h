@@ -2,6 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "BackgroundBoard.h"
 
 class HelloWorld : public cocos2d::CCLayer
 {
@@ -14,9 +15,12 @@ public:
     
     // a selector callback
     void menuCloseCallback(CCObject* pSender);
+	void menuCloseCallback2(CCObject* pSender);
     
     // implement the "static node()" method manually
     CREATE_FUNC(HelloWorld);
+
+	BackgroundBoard* bg;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
