@@ -2,8 +2,6 @@
 #include "FragmentEffect.h"
 
 
-USING_NS_CC;
-
 CCScene* HelloWorld::scene()
 {
     // 'scene' is an autorelease object
@@ -28,13 +26,6 @@ bool HelloWorld::init()
     {
         return false;
     }
-
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-	
-	CCSprite* sprite= CCSprite::create("HelloWorld.png");
-    sprite->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
-    this->addChild(sprite, 0);
 
 	Matrix44 m0 = {
 		0.8f, 0.0f, 0.0f, 0.0f,						
@@ -92,11 +83,28 @@ bool HelloWorld::init()
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m6);
 
+	TouchGroup* ul =TouchGroup::create();
+	ul->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TetrisUi/TetrisUi.ExportJson"));
+	this->addChild(ul,0);
+
+
+	m_scoreLabel = (UILabelAtlas*)ul->getWidgetByName("altScore");
+	m_scoreLabel->setStringValue("0");
+	m_score =0;
+
+	m_btStart = (UIButton*)ul->getWidgetByName("btStart");
+	m_btStart->addTouchEventListener(this,toucheventselector(HelloWorld::startCallback));
+
 	bg = BackgroundBoard::create(20.0f,"block.png");
-	bg->setPosition(visibleSize.width + origin.x, 0.0f);
+	UIWidget* pFrame = ul->getWidgetByName("imgFrame");
+	CCSize frameSize = pFrame->getContentSize();
+	bg->setPosition(pFrame->getPosition());
+	bg->setScaleX(frameSize.width/12/20.0f);
+	bg->setScaleY(frameSize.height/20/20.0f);
+	ul->getWidgetByName("root")->addNode(bg,1);
 	bg->setDropDur(0.5f);
 	bg->start();
-	this->addChild(bg);
+	bg->setClearLineListener(this,clearLine_selector(HelloWorld::addScore));
 
 
     return true;
@@ -110,5 +118,35 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
 
 void HelloWorld::menuCloseCallback2(CCObject* pSender)
 {
+	
+}
+
+void HelloWorld::startCallback(CCObject* pObject, TouchEventType e)
+{
+	if(e == TOUCH_EVENT_ENDED)
+	{
+		if(bg->isPause())
+		{
+			bg->continueDrop();
+			m_btStart->setTitleText("pasue");
+		}
+		else
+		{
+			bg->pasueDrop();
+			m_btStart->setTitleText("continue");
+		}
+	}
+}
+
+void HelloWorld::addScore(int numLineCleared)
+{
+	if(numLineCleared>0)
+	{
+		char str[10];
+		m_score+=((1<<numLineCleared)*100);
+		sprintf(str,"%d",m_score);
+		m_scoreLabel->setStringValue(str);
+	}
+
 	
 }

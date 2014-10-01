@@ -26,11 +26,13 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 
 	srand(time(0));
 
+	m_isPause	     = false;
 	m_fnBlockTex     = fnBlockTex;
 	m_blockSize      = blockSize;
 	m_actSensitivity = 10.0f;
 	m_dropDur        = 0.1f;
-
+	m_clearLineLisener  = 0;
+	m_clearLineCallBack = 0;
 	return true;
 }
 
@@ -110,10 +112,17 @@ bool BackgroundBoard::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	if(m_bGameOver || !m_curTetromino)
 		return false;
 
-	
-	m_touchPos  = pTouch->getLocation();
-	m_bAccAction  = true;
-	return true;
+	CCPoint point = this->convertToNodeSpace(pTouch->getLocation());
+
+	if(point.x>-12*m_blockSize && point.x<0.0f &&  
+	   point.y>0.0f && point.y<20.0f*m_blockSize)
+	{
+		m_touchPos  = pTouch->getLocation();
+		m_bAccAction  = true;
+		return true;
+	}
+
+	return false;
 }
 
 void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
@@ -267,13 +276,18 @@ int BackgroundBoard::clearLine()
 			m_bgInfo[r] = m_bgInfo[r+moveBy];
 			m_blockSprRow[r] = m_blockSprRow[r+moveBy];
 			if(m_blockSprRow[r]!=0)
-				m_blockSprRow[r]->runAction(CCMoveBy::create(moveBy*0.2f,ccp(0.0f,-moveBy*m_blockSize))); 
+				m_blockSprRow[r]->runAction(CCMoveBy::create(0.2f,ccp(0.0f,-moveBy*m_blockSize))); 
 		}
 		else
 		{
 			m_bgInfo[r] = 0;
 			m_blockSprRow[r] = 0;
 		}
+	}
+
+	if(m_clearLineLisener && m_clearLineCallBack)
+	{
+		(m_clearLineLisener->*m_clearLineCallBack)(moveBy);
 	}
 
 	return moveBy;
@@ -299,4 +313,22 @@ void BackgroundBoard::onGameOver()
 	CCMessageBox("GameOver","GameOver");
 	m_bGameOver = true;
 	start();
+}
+
+void BackgroundBoard::pasueDrop()
+{
+	if(m_curTetromino)
+	{
+		m_curTetromino->pauseSchedulerAndActions();
+		m_isPause = true;
+	}
+}
+
+void BackgroundBoard::continueDrop()
+{
+	if(m_curTetromino)
+	{
+		m_curTetromino->resumeSchedulerAndActions();
+		m_isPause = false;
+	}
 }

@@ -19,10 +19,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setOpenGLView(pEGLView);
 	
     // turn on display FPS
-    pDirector->setDisplayStats(true);
+    pDirector->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);
+
+	pEGLView->setDesignResolutionSize(320.0f,480.0f,kResolutionShowAll);
 
     // create a scene. it's an autorelease object
     CCScene *pScene = HelloWorld::scene();
