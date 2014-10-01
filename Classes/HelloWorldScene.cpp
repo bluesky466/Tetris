@@ -29,11 +29,18 @@ bool HelloWorld::init()
         return false;
     }
 
+	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+	
+	CCSprite* sprite= CCSprite::create("HelloWorld.png");
+    sprite->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
+    this->addChild(sprite, 0);
+
 	Matrix44 m0 = {
 		0.8f, 0.0f, 0.0f, 0.0f,						
 		0.0f, 0.2f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.2f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.6f
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m0);
 
@@ -41,7 +48,7 @@ bool HelloWorld::init()
 		0.2f, 0.0f, 0.0f, 0.0f,						
 		0.0f, 0.8f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.2f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.6f
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m1);
 
@@ -49,7 +56,7 @@ bool HelloWorld::init()
 		0.2f, 0.0f, 0.0f, 0.0f,						
 		0.0f, 0.2f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.8f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.6f
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m2);
 
@@ -57,7 +64,7 @@ bool HelloWorld::init()
 		0.2f, 0.0f, 0.0f, 0.0f,						
 		0.0f, 0.8f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.8f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.6f
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m3);
 
@@ -65,7 +72,7 @@ bool HelloWorld::init()
 		0.8f, 0.0f, 0.0f, 0.0f,						
 		0.0f, 0.2f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.8f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.6f
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m4);
 
@@ -73,7 +80,7 @@ bool HelloWorld::init()
 		1.0f, 0.0f, 0.0f, 0.0f,						
 		0.0f, 0.4f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.2f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.6f
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m5);
 
@@ -81,18 +88,17 @@ bool HelloWorld::init()
 		0.6f, 0.0f, 0.0f, 0.0f,						
 		0.0f, 0.7f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.7f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.6f
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m6);
-
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	bg = BackgroundBoard::create(20.0f,"block.png");
 	bg->setPosition(visibleSize.width + origin.x, 0.0f);
 	bg->setDropDur(0.5f);
 	bg->start();
 	this->addChild(bg);
+
+
     return true;
 }
 

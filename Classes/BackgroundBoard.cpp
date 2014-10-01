@@ -267,7 +267,7 @@ int BackgroundBoard::clearLine()
 			m_bgInfo[r] = m_bgInfo[r+moveBy];
 			m_blockSprRow[r] = m_blockSprRow[r+moveBy];
 			if(m_blockSprRow[r]!=0)
-				m_blockSprRow[r]->runAction(CCMoveBy::create(moveBy*0.02f,ccp(0.0f,-moveBy*m_blockSize))); 
+				m_blockSprRow[r]->runAction(CCMoveBy::create(moveBy*0.2f,ccp(0.0f,-moveBy*m_blockSize))); 
 		}
 		else
 		{
