@@ -24,6 +24,9 @@ public:
 	int getRotate()    {return m_rotate;}
 	int getShape()     {return m_shape;}
 	
+	bool isTouch(CCPoint worldCoord);
+	bool isUnderTetromino(CCPoint worldCoord);
+	bool isBesideTetromino(CCPoint worldCoord);
 	bool init(int shape,float blockSize,const char* fnBlockTexture);
 
 	static Tetromino* create(int shape,float blockSize,const char* fnBlockTexture);

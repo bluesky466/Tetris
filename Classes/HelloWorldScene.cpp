@@ -34,6 +34,7 @@ bool HelloWorld::init()
 
 	bg = BackgroundBoard::create(20.0f,"CloseNormal.png");
 	bg->setPosition(visibleSize.width + origin.x, 0.0f);
+	bg->setDropDur(0.5f);
 	this->addChild(bg);
 
 	Matrix44 m = {

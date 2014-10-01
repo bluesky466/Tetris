@@ -138,3 +138,45 @@ bool Tetromino::setRow(int r,int* bgInfo)
 
 	return false;
 }
+
+bool Tetromino::isTouch(CCPoint worldCoord)
+{
+	for(int i = 0 ; i<4 ; ++i)
+	{
+		CCSize size = m_blockSprite[i]->getContentSize();
+		CCPoint pos = m_blockSprite[i]->convertToNodeSpace(worldCoord);
+
+		if(pos.x>0.0f && pos.y>0.0f && pos.x<size.width && pos.y<size.height)
+			return true;
+	}
+
+	return false;
+}
+
+bool Tetromino::isUnderTetromino(CCPoint worldCoord)
+{
+	for(int i = 0 ; i<4 ; ++i)
+	{
+		CCSize size = m_blockSprite[i]->getContentSize();
+		CCPoint pos = m_blockSprite[i]->convertToNodeSpace(worldCoord);
+
+		if(pos.x>0.0f && pos.x<size.width)
+			return true;
+	}
+
+	return false;
+}
+
+bool Tetromino::isBesideTetromino(CCPoint worldCoord)
+{
+	for(int i = 0 ; i<4 ; ++i)
+	{
+		CCSize size = m_blockSprite[i]->getContentSize();
+		CCPoint pos = m_blockSprite[i]->convertToNodeSpace(worldCoord);
+
+		if(pos.y>0.0f && pos.x<size.height)
+			return true;
+	}
+
+	return false;
+}

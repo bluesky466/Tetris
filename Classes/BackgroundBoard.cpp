@@ -19,6 +19,8 @@ BackgroundBoard* BackgroundBoard::create(float blockSize,char* fnBlockTex)
 
 void BackgroundBoard::addNewTetromino()
 {
+	m_accDropDur = m_dropDur;
+
 	m_curTetromino = Tetromino::create(rand()%7,m_blockSize,m_fnBlockTex);
 
 	int col = m_curTetromino->getCol();
@@ -47,16 +49,11 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 	memset(m_bgInfo,0,BACKGROUND_ROW*sizeof(int));
 
 	m_fnBlockTex     = fnBlockTex;
-	m_dropDur        = 0.1f;
 	m_blockSize      = blockSize;
-	m_actionDistance = 100.0f;
-	m_bGameOver		 = false;
-	m_bAccAction     = false;
+	m_actSensitivity = 10.0f;
+	m_dropDur        = 0.1f;
 
-	for(int i = 0 ; i<BACKGROUND_ROW ; ++i)
-		m_blockSprRow[i] = 0;
-
-	addNewTetromino();
+	start();
 
 	return true;
 }
@@ -67,36 +64,57 @@ void BackgroundBoard::curTetrominoMove(CCNode*)
 	{
 		int col = m_curTetromino->getCol();
 		int row = m_curTetromino->getRow();
-		CCSequence* pSqe = CCSequence::create(CCMoveBy::create(m_dropDur,ccp(0.0f,-m_blockSize)), 
+		CCSequence* pSqe = CCSequence::create(CCMoveBy::create(m_accDropDur,ccp(0.0f,-m_blockSize)), 
 											  CCCallFuncN::create(this,callfuncN_selector(BackgroundBoard::curTetrominoMove)),
 											  NULL);
 
 		m_curTetromino->runAction(pSqe);
 	}
+
 	else
 	{
-		if(!addToBg())
-		{
-			CCMessageBox("GameOver","GameOver");
-			m_bGameOver = true;
-		}
-		else
-			addNewTetromino();
-			
+		CCSequence* pSeq = CCSequence::create(CCDelayTime::create(0.5f),
+											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::stopDropAndAddToBg)),
+											  NULL);
+		this->runAction(pSeq);
+		
 	}
 
 }
 
+void BackgroundBoard::stopDropAndAddToBg()
+{
+	if(m_curTetromino->drop(m_bgInfo))
+	{
+		int col = m_curTetromino->getCol();
+		int row = m_curTetromino->getRow();
+		CCSequence* pSqe = CCSequence::create(CCMoveBy::create(m_accDropDur,ccp(0.0f,-m_blockSize)), 
+											  CCCallFuncN::create(this,callfuncN_selector(BackgroundBoard::curTetrominoMove)),
+											  NULL);
+
+		m_curTetromino->runAction(pSqe);
+	}
+	
+	else if(!addToBg())
+	{
+		CCMessageBox("GameOver","GameOver");
+		m_bGameOver = true;
+	}
+
+	else
+		addNewTetromino();
+			
+}
+
 bool BackgroundBoard::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	if(m_bGameOver)
+	if(m_bGameOver || !m_curTetromino)
 		return false;
-	else
-	{
-		m_touchPosY = pTouch->getLocation().y;
-		m_bAccAction   = true;
-		return true;
-	}
+
+	
+	m_touchPos  = pTouch->getLocation();
+	m_bAccAction  = true;
+	return true;
 }
 
 void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
@@ -106,37 +124,27 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 
 	CCPoint localtion = pTouch->getLocation();
 
-	if(m_bAccAction && localtion.y-m_touchPosY>m_actionDistance)
+	if(m_bAccAction && pTouch->getDelta().y > m_actSensitivity)
 	{
 		m_curTetromino->clockwiseRotate(m_bgInfo);
 		m_bAccAction = false;
 		return ;
 	}
-	else if(m_bAccAction && m_touchPosY - localtion.y>m_actionDistance)
-	{
-		while(m_curTetromino->drop(m_bgInfo))
-		{
-			;
-		}
 
-		if(!addToBg())
-		{
-			CCMessageBox("GameOver","GameOver");
-			m_bGameOver = true;
-		}
-		else
-			addNewTetromino();
-	
-		m_bAccAction = false;
+	else if(m_bAccAction && pTouch->getDelta().y < -m_actSensitivity)
+	{
+		m_accDropDur /= 2.0f;
 		return ;
 	}
 
-	CCPoint target = this->convertToNodeSpace(localtion);
-	float posX = -m_curTetromino->getCol() * m_blockSize;
+	float correct = TouchCorrect[m_curTetromino->getShape()][m_curTetromino->getRotate()];
+	float targetX = this->convertToNodeSpace(localtion).x;
+	targetX += correct*m_blockSize;
+	float posX    = -m_curTetromino->getCol() * m_blockSize;
 
-	if(posX < target.x)
+	if(posX < targetX)
 	{
-		while(posX+m_blockSize < target.x)
+		while(posX+m_blockSize < targetX)
 		{
 			if(!m_curTetromino->move(false,m_bgInfo))
 				break;
@@ -148,7 +156,7 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	}
 	else
 	{
-		while(posX-m_blockSize > target.x)
+		while(posX-m_blockSize > targetX)
 		{
 			if(!m_curTetromino->move(true,m_bgInfo))
 				break;
@@ -158,6 +166,14 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 
 		m_curTetromino->setPositionX(posX);
 	}
+}
+
+void BackgroundBoard::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+{
+}
+
+void BackgroundBoard::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
+{
 }
 
 void BackgroundBoard::onEnter()
@@ -205,21 +221,73 @@ bool BackgroundBoard::addToBg()
 					Block* pBlock = Block::create(m_fnBlockTex);
 					pBlock->setPosition(ccp((-i-col)*m_blockSize,0.0f));
 					pBlock->setBlockSize(m_blockSize);
-
 					m_blockSprRow[checkRow]->addChild(pBlock);
 				}
 			}
 		}
 		else if(TetrominoShape[shape][rotate][r]==0)
+		{
+			clearLine();
 			return true;
+		}
 		else
 			return false;
 	}
 
+	clearLine();
 	return true;
 }
 
-bool BackgroundBoard::clearLine()
+int BackgroundBoard::clearLine()
 {
-	return false;
+	int moveBy = 0;
+	int r = 0;
+	for(; r<BACKGROUND_ROW ; ++r)
+	{
+		if(m_bgInfo[r]==BACKGROUND_ROW_CODE)
+		{
+			while(m_bgInfo[r+moveBy]==BACKGROUND_ROW_CODE)
+			{
+				m_bgInfo[r+moveBy] = 0;
+				this->removeChild(m_blockSprRow[r+moveBy]);
+				m_blockSprRow[r+moveBy] = 0;
+				moveBy++;
+			}
+
+			break;
+		}
+	}
+
+	for(; r<BACKGROUND_ROW ; ++r)
+	{
+		if(r+moveBy<BACKGROUND_ROW)
+		{
+			m_bgInfo[r] = m_bgInfo[r+moveBy];
+			m_blockSprRow[r] = m_blockSprRow[r+moveBy];
+			if(m_blockSprRow[r]!=0)
+				m_blockSprRow[r]->runAction(CCMoveBy::create(moveBy*0.02f,ccp(0.0f,-moveBy*m_blockSize))); 
+		}
+		else
+		{
+			m_bgInfo[r] = 0;
+			m_blockSprRow[r] = 0;
+		}
+	}
+
+	return moveBy;
+}
+
+void BackgroundBoard::start()
+{
+	this->removeAllChildren();
+
+	memset(m_bgInfo,0,BACKGROUND_ROW*sizeof(int));
+
+	m_bGameOver		 = false;
+	m_bAccAction     = false;
+
+	for(int i = 0 ; i<BACKGROUND_ROW ; ++i)
+		m_blockSprRow[i] = 0;
+
+	addNewTetromino();
 }
