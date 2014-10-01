@@ -28,25 +28,71 @@ bool HelloWorld::init()
     {
         return false;
     }
-    
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	bg = BackgroundBoard::create(20.0f,"CloseNormal.png");
-	bg->setPosition(visibleSize.width + origin.x, 0.0f);
-	bg->setDropDur(0.5f);
-	this->addChild(bg);
-
-	Matrix44 m = {
-		1.0f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
+	Matrix44 m0 = {
+		0.8f, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.2f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.2f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
 	};
+	FragmentEffect::getInstance()->addEffectMatrix(m0);
 
-	//七种效果先这样设置
-	for(int i = 0 ; i<7 ; i++)
-		FragmentEffect::getInstance()->addEffectMatrix(m);
+	Matrix44 m1 = {
+		0.2f, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.8f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.2f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	FragmentEffect::getInstance()->addEffectMatrix(m1);
+
+	Matrix44 m2 = {
+		0.2f, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.2f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.8f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	FragmentEffect::getInstance()->addEffectMatrix(m2);
+
+	Matrix44 m3 = {
+		0.2f, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.8f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.8f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	FragmentEffect::getInstance()->addEffectMatrix(m3);
+
+	Matrix44 m4 = {
+		0.8f, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.2f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.8f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	FragmentEffect::getInstance()->addEffectMatrix(m4);
+
+	Matrix44 m5 = {
+		1.0f, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.4f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.2f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	FragmentEffect::getInstance()->addEffectMatrix(m5);
+
+	Matrix44 m6 = {
+		0.6f, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.7f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.7f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	FragmentEffect::getInstance()->addEffectMatrix(m6);
+
+	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+
+	bg = BackgroundBoard::create(20.0f,"block.png");
+	bg->setPosition(visibleSize.width + origin.x, 0.0f);
+	bg->setDropDur(0.5f);
+	bg->start();
+	this->addChild(bg);
     return true;
 }
 

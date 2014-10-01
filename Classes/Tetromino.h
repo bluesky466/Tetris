@@ -5,6 +5,8 @@
 #include "GlobalDefine.h"
 #include "Block.h"
 
+#define TetrominoEffect(n) (ES_USER_DEFINED+n)
+
 USING_NS_CC;
 //原点在右下角,数组的第零行在最底下
 class Tetromino : public CCNode

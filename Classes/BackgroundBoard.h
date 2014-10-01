@@ -12,6 +12,7 @@ class BackgroundBoard : public CCNode,public CCTouchDelegate
 {
 public:
 	void curTetrominoMove(CCNode*);
+	void start();
 	void setActSensitivity(float actSensitivity) {m_actSensitivity = actSensitivity;}
 	void setDropDur(float dropDur)				 {m_dropDur = dropDur;}
 	void stopDropAndAddToBg();
@@ -38,10 +39,10 @@ private:
 	CCNode*    m_blockSprRow[BACKGROUND_ROW];
 	Tetromino* m_curTetromino;
 
-	void start();
 	void addNewTetromino();
 	bool addToBg();
 	int  clearLine();
+	void onGameOver();
 };
 
 #endif

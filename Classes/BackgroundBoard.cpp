@@ -17,6 +17,23 @@ BackgroundBoard* BackgroundBoard::create(float blockSize,char* fnBlockTex)
     } 
 }
 
+bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
+{
+	if(!CCNode::init())
+		return false;
+
+	memset(m_bgInfo,0,BACKGROUND_ROW*sizeof(int));
+
+	srand(time(0));
+
+	m_fnBlockTex     = fnBlockTex;
+	m_blockSize      = blockSize;
+	m_actSensitivity = 10.0f;
+	m_dropDur        = 0.1f;
+
+	return true;
+}
+
 void BackgroundBoard::addNewTetromino()
 {
 	m_accDropDur = m_dropDur;
@@ -39,23 +56,8 @@ void BackgroundBoard::addNewTetromino()
 		m_curTetromino->runAction(pSqe);
 		this->addChild(m_curTetromino);
 	}
-}
-
-bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
-{
-	if(!CCNode::init())
-		return false;
-
-	memset(m_bgInfo,0,BACKGROUND_ROW*sizeof(int));
-
-	m_fnBlockTex     = fnBlockTex;
-	m_blockSize      = blockSize;
-	m_actSensitivity = 10.0f;
-	m_dropDur        = 0.1f;
-
-	start();
-
-	return true;
+	else
+		onGameOver();
 }
 
 void BackgroundBoard::curTetrominoMove(CCNode*)
@@ -96,10 +98,7 @@ void BackgroundBoard::stopDropAndAddToBg()
 	}
 	
 	else if(!addToBg())
-	{
-		CCMessageBox("GameOver","GameOver");
-		m_bGameOver = true;
-	}
+		onGameOver();
 
 	else
 		addNewTetromino();
@@ -189,13 +188,15 @@ void BackgroundBoard::onExit()
 	m_bAccAction = false;
 }
 
-
 bool BackgroundBoard::addToBg()
 {
 	int row = m_curTetromino->getRow();
 	int col = m_curTetromino->getCol();
 	int rotate = m_curTetromino->getRotate();
 	int shape  = m_curTetromino->getShape();
+
+	if(row>=BACKGROUND_ROW)
+		return false;
 
 	this->removeChild(m_curTetromino);
 	m_curTetromino = 0;
@@ -219,6 +220,7 @@ bool BackgroundBoard::addToBg()
 				if(TetrominoShape[shape][rotate][r] & 1<<i)
 				{
 					Block* pBlock = Block::create(m_fnBlockTex);
+					pBlock->setEffect(TetrominoEffect(shape));
 					pBlock->setPosition(ccp((-i-col)*m_blockSize,0.0f));
 					pBlock->setBlockSize(m_blockSize);
 					m_blockSprRow[checkRow]->addChild(pBlock);
@@ -290,4 +292,11 @@ void BackgroundBoard::start()
 		m_blockSprRow[i] = 0;
 
 	addNewTetromino();
+}
+
+void BackgroundBoard::onGameOver()
+{
+	CCMessageBox("GameOver","GameOver");
+	m_bGameOver = true;
+	start();
 }

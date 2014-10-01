@@ -23,6 +23,7 @@ public:
 	bool initWithFile(const char *pszFilename);
 	void setEffect(unsigned int effectSel);
 	void setBlockSize(float size);
+
 private:
 	int m_index;
 };

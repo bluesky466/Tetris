@@ -33,6 +33,7 @@ bool Tetromino::init(int shape,float blockSize,const char* fnBlockTexture)
 		if(m_blockSprite[i] != 0)
 		{
 			m_blockSprite[i]->setBlockSize(m_blockSize);
+			m_blockSprite[i]->setEffect(TetrominoEffect(m_shape));
 			this->addChild(m_blockSprite[i]);
 		}
 		else
