@@ -31,8 +31,10 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 	m_blockSize      = blockSize;
 	m_actSensitivity = 10.0f;
 	m_dropDur        = 0.1f;
-	m_clearLineLisener  = 0;
-	m_clearLineCallBack = 0;
+	m_clearLineListener = 0;
+	m_clearLineCallback = 0;
+	m_gameOverListener  = 0;
+	m_gameOverCallback  = 0;
 	return true;
 }
 
@@ -59,7 +61,11 @@ void BackgroundBoard::addNewTetromino()
 		this->addChild(m_curTetromino);
 	}
 	else
+	{
+		m_curTetromino->release();
+		m_curTetromino = 0;
 		onGameOver();
+	}
 }
 
 void BackgroundBoard::curTetrominoMove(CCNode*)
@@ -78,15 +84,14 @@ void BackgroundBoard::curTetrominoMove(CCNode*)
 	else
 	{
 		CCSequence* pSeq = CCSequence::create(CCDelayTime::create(0.5f),
-											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::stopDropAndAddToBg)),
+											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::setNextTetromino)),
 											  NULL);
 		this->runAction(pSeq);
 		
 	}
-
 }
 
-void BackgroundBoard::stopDropAndAddToBg()
+void BackgroundBoard::setNextTetromino()
 {
 	if(m_curTetromino->drop(m_bgInfo))
 	{
@@ -285,9 +290,9 @@ int BackgroundBoard::clearLine()
 		}
 	}
 
-	if(m_clearLineLisener && m_clearLineCallBack)
+	if(m_clearLineListener && m_clearLineCallback)
 	{
-		(m_clearLineLisener->*m_clearLineCallBack)(moveBy);
+		(m_clearLineListener->*m_clearLineCallback)(moveBy);
 	}
 
 	return moveBy;
@@ -310,9 +315,10 @@ void BackgroundBoard::start()
 
 void BackgroundBoard::onGameOver()
 {
-	CCMessageBox("GameOver","GameOver");
-	m_bGameOver = true;
-	start();
+	if(m_gameOverListener && m_gameOverCallback)
+	{
+		(m_gameOverListener->*m_gameOverCallback)();
+	}
 }
 
 void BackgroundBoard::pasueDrop()

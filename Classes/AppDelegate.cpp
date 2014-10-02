@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "GamesScence.h"
 
 USING_NS_CC;
 
@@ -27,7 +27,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	pEGLView->setDesignResolutionSize(320.0f,480.0f,kResolutionShowAll);
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = HelloWorld::scene();
+    CCScene *pScene = GamesScence::scene();
 
     // run
     pDirector->runWithScene(pScene);

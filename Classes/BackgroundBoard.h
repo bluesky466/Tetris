@@ -11,19 +11,24 @@ USING_NS_CC;
 typedef void (CCObject::*SEL_ClearLine)(int numLine);
 #define clearLine_selector(_SELECTOR) (SEL_ClearLine)(&_SELECTOR)
 
+typedef void (CCObject::*SEL_GameOver)();
+#define gameOver_selector(_SELECTOR) (SEL_GameOver)(&_SELECTOR)
+
 class BackgroundBoard : public CCNode,public CCTouchDelegate
 {
 public:
 	void curTetrominoMove(CCNode*);
 	void start();
-	void setActSensitivity(float actSensitivity) {m_actSensitivity = actSensitivity;}
-	void setDropDur(float dropDur)				 {m_dropDur = dropDur;}
-	bool isPause()								 {return m_isPause;}
-	void stopDropAndAddToBg();
+	void setNextTetromino();
 	void setClearLineListener(CCObject*,SEL_ClearLine);
+	void setGameOverListener(CCObject*,SEL_GameOver);
 	void pasueDrop();
 	void continueDrop();
 	
+	void setActSensitivity(float actSensitivity) {m_actSensitivity = actSensitivity;}
+	void setDropDur(float dropDur)				 {m_dropDur = dropDur;}
+	bool isPause()								 {return m_isPause;}
+
 	virtual bool init(float blockSize,char* fnBlockTex);
 	virtual void onEnter();
     virtual void onExit();
@@ -46,8 +51,10 @@ private:
 	CCPoint m_touchPos;
 	CCNode*       m_blockSprRow[BACKGROUND_ROW];
 	Tetromino*    m_curTetromino;
-	CCObject*     m_clearLineLisener;
-	SEL_ClearLine m_clearLineCallBack;
+	CCObject*     m_clearLineListener;
+	SEL_ClearLine m_clearLineCallback;
+	CCObject*     m_gameOverListener;
+	SEL_GameOver  m_gameOverCallback;
 
 	void addNewTetromino();
 	bool addToBg();
@@ -57,8 +64,14 @@ private:
 
 inline void BackgroundBoard::setClearLineListener(CCObject* pObject,SEL_ClearLine callback)
 {
-	m_clearLineLisener   = pObject;
-	m_clearLineCallBack  = callback;
+	m_clearLineListener   = pObject;
+	m_clearLineCallback  = callback;
+}
+
+inline void BackgroundBoard::setGameOverListener(CCObject* pObject,SEL_GameOver callback)
+{
+	m_gameOverListener  = pObject;
+	m_gameOverCallback = callback;
 }
 
 #endif
