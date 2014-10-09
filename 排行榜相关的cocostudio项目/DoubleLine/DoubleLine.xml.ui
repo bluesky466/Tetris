@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<UIProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ProjectDir>E:\cocostudioProj\DoubleLine</ProjectDir>
+  <Version>1.4.0.1</Version>
+  <Resources>E:\cocostudioProj\DoubleLine\Resources</Resources>
+  <Name>DoubleLine</Name>
+  <JsonFileName>DoubleLine.json</JsonFileName>
+  <JsonFolder>E:\cocostudioProj\DoubleLine\Json</JsonFolder>
+  <JsonList>
+    <string>DoubleLine.json</string>
+  </JsonList>
+  <CanvasSize>
+    <Width>0</Width>
+    <Height>0</Height>
+  </CanvasSize>
+  <filePath>E:\cocostudioProj\DoubleLine\DoubleLine.xml.ui</filePath>
+  <ProjectType>UIProject</ProjectType>
+  <ResRelativePath />
+  <imageFileList>
+    <string>DoubleLine0.plist</string>
+  </imageFileList>
+  <imagePngList>
+    <string>DoubleLine0.png</string>
+  </imagePngList>
+  <JsonSuffix>.json</JsonSuffix>
+  <CurrentUIJson>DoubleLine.json</CurrentUIJson>
+</UIProject>
