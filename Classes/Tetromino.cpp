@@ -30,7 +30,7 @@ bool Tetromino::init(int shape,float blockSize,const char* fnBlockTexture)
 	{
 		m_blockSprite[i] = Block::create(fnBlockTexture);
 
-		if(m_blockSprite[i] != 0)
+		if(m_blockSprite[i]!=0)
 		{
 			m_blockSprite[i]->setBlockSize(m_blockSize);
 			m_blockSprite[i]->setEffect(TetrominoEffect(m_shape));
@@ -41,6 +41,7 @@ bool Tetromino::init(int shape,float blockSize,const char* fnBlockTexture)
 	}
 
 	setBlockSprPos();
+	m_targetBlockNode = 0;
 
 	return true;
 }
@@ -53,7 +54,16 @@ bool Tetromino::clockwiseRotate(const int* bgInfo)
 	if(!isCollision(m_col,m_row,rotateTest,bgInfo))
 	{
 		m_rotate = rotateTest;
+
+		m_targetRow = m_row;
+		while(testDrop(bgInfo))
+		{
+			;//空着就好
+		}
+
 		setBlockSprPos();
+		setTargetBlockSprPos();
+
 		return true;
 	}
 	return false;
@@ -73,6 +83,55 @@ void Tetromino::setBlockSprPos()
 		}
 }
 
+CCNode* Tetromino::getTargetBlockNode(const int* bgInfo,const char* fnBlockTexture)
+{
+	if(!m_targetBlockNode)
+	{
+		m_targetBlockNode = CCNode::create();
+
+		for(int i = 0 ; i<4 ; ++i)
+		{
+			m_targetBlockSprite[i] = Block::create(fnBlockTexture);
+
+			if(m_targetBlockSprite[i]!=0)
+			{
+				m_targetBlockSprite[i]->setBlockSize(m_blockSize);
+				m_targetBlockSprite[i]->setEffect(TargetTetrominoEffect(m_shape));
+				m_targetBlockNode->addChild(m_targetBlockSprite[i]);
+			}
+			else
+				return 0;
+		}
+
+		setTargetBlockSprPos();
+
+		m_targetRow = m_row;
+		while(testDrop(bgInfo))
+		{
+			;//空着就好
+		}
+	}
+
+	return m_targetBlockNode;
+}
+
+void Tetromino::setTargetBlockSprPos()
+{
+	if(!m_targetBlockNode)
+		return ;
+
+	int indexBlock = 0;
+	for(int r = 0 ; r<4 ; ++r)
+		for(int c = 0 ; c<4 ; ++c)
+		{
+			if(TetrominoShape[m_shape][m_rotate][r]&(1<<c))
+			{
+				CCPoint pos(-c*m_blockSize,r*m_blockSize);
+				m_targetBlockSprite[indexBlock++]->setPosition(pos);
+			}
+		}
+}
+
 bool Tetromino::move(bool bLeft,const int* bgInfo)
 {
 	int colTest = bLeft ? m_col+1 : m_col-1;
@@ -80,6 +139,13 @@ bool Tetromino::move(bool bLeft,const int* bgInfo)
 	if(!isCollision(colTest,m_row,m_rotate,bgInfo))
 	{
 		m_col = colTest;
+
+		m_targetRow = m_row;
+		while(testDrop(bgInfo))
+		{
+			;//空着就好
+		}
+
 		return true;
 	}
 	return false;
@@ -92,6 +158,18 @@ bool Tetromino::drop(const int* bgInfo)
 	if(!isCollision(m_col,rowTest,m_rotate,bgInfo))
 	{
 		m_row = rowTest;
+		return true;
+	}
+	return false;
+}
+
+bool Tetromino::testDrop(const int* bgInfo)
+{
+	int rowTest = m_targetRow-1;
+	
+	if(!isCollision(m_col,rowTest,m_rotate,bgInfo))
+	{
+		m_targetRow = rowTest;
 		return true;
 	}
 	return false;
@@ -118,11 +196,19 @@ bool Tetromino::isCollision(int col,int row,int rotate,const int* bgInfo)
 	return false;
 }
 
+
 bool Tetromino::setCol(int c,int* bgInfo) 
 {
 	if(!isCollision(c,m_row,m_rotate,bgInfo))
 	{
 		m_col = c;
+
+		m_targetRow = m_row;
+		while(testDrop(bgInfo))
+		{
+			;//空着就好
+		}
+
 		return true;
 	}
 

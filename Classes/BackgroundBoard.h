@@ -14,19 +14,31 @@ typedef void (CCObject::*SEL_ClearLine)(int numLine);
 typedef void (CCObject::*SEL_GameOver)();
 #define gameOver_selector(_SELECTOR) (SEL_GameOver)(&_SELECTOR)
 
+/**
+ *  底板
+ */
 class BackgroundBoard : public CCNode,public CCTouchDelegate
 {
 public:
-	void curTetrominoMove(CCNode*);
+	///游戏开始,是重新开始的时候用,暂停后继续请用continueDrop
 	void start();
-	void setNextTetromino();
-	void setClearLineListener(CCObject*,SEL_ClearLine);
-	void setGameOverListener(CCObject*,SEL_GameOver);
-	void pasueDrop();
-	void continueDrop();
+
+	void pasueDrop();     ///<暂停游戏
+	void continueDrop();  ///<继续游戏
+
+	void curTetrominoMove(); ///<令当前的方块往下降落,是一个回调函数
+	void setNextTetromino(); ///<设置新的方块,是一个回调函数
+
 	
+	void setClearLineListener(CCObject*,SEL_ClearLine);  ///<设置行消除的回调
+	void setGameOverListener(CCObject*,SEL_GameOver);    ///<设置GameOver的回调
+	
+	///设置旋转和直接下落灵的敏度
 	void setActSensitivity(float actSensitivity) {m_actSensitivity = actSensitivity;}
+
+	///设置下落一格的等待时间
 	void setDropDur(float dropDur)				 {m_dropDur = dropDur;}
+
 	bool isPause()								 {return m_isPause;}
 
 	virtual bool init(float blockSize,char* fnBlockTex);
@@ -51,14 +63,18 @@ private:
 	CCPoint m_touchPos;
 	CCNode*       m_blockSprRow[BACKGROUND_ROW];
 	Tetromino*    m_curTetromino;
+	CCNode*       m_targetBlock;
 	CCObject*     m_clearLineListener;
 	SEL_ClearLine m_clearLineCallback;
 	CCObject*     m_gameOverListener;
 	SEL_GameOver  m_gameOverCallback;
 
-	void addNewTetromino();
-	bool addToBg();
-	int  clearLine();
+
+	int  clearLine();          ///<消除满方块的行
+	bool addToBg();            ///<将当前的方块加到底板标记数组中区
+	void addNewTetromino();    ///<增加新的方块
+	void setTargetBlockPos();  ///<设置最后落点提示精灵的位置
+	void gotoTargetPos();      ///<直接降落到最后落点
 	void onGameOver();
 };
 

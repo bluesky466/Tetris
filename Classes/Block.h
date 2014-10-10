@@ -16,6 +16,9 @@ enum BlockType{
 	BT_GOLDEN  = 6
 };
 
+/**
+ * 小立方体,四个可以组成一个形状的俄罗斯方块
+ */
 class Block : public CCSprite
 {
 public:
