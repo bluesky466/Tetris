@@ -29,8 +29,7 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 	m_isPause	     = false;
 	m_fnBlockTex     = fnBlockTex;
 	m_blockSize      = blockSize;
-	m_actSensitivity = 10.0f;
-	m_dropDur        = 0.1f;
+	m_dropDelayTime     = 0.1f;
 	m_clearLineListener = 0;
 	m_clearLineCallback = 0;
 	m_gameOverListener  = 0;
@@ -42,8 +41,6 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 
 void BackgroundBoard::addNewTetromino()
 {
-	m_accDropDur = m_dropDur;
-
 	m_curTetromino = Tetromino::create(rand()%7,m_blockSize,m_fnBlockTex);
 
 	int col = m_curTetromino->getCol();
@@ -55,7 +52,7 @@ void BackgroundBoard::addNewTetromino()
 	{
 		col = m_curTetromino->getCol();
 		row = m_curTetromino->getRow();
-		CCSequence* pSqe = CCSequence::create(CCDelayTime::create(m_accDropDur),
+		CCSequence* pSqe = CCSequence::create(CCDelayTime::create(m_dropDelayTime),
 											  CCMoveBy::create(0.1f,ccp(0.0f,-m_blockSize)), 
 											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::curTetrominoMove)),
 											  NULL);
@@ -91,7 +88,7 @@ void BackgroundBoard::curTetrominoMove()
 	{
 		int col = m_curTetromino->getCol();
 		int row = m_curTetromino->getRow();
-		CCSequence* pSqe = CCSequence::create(CCDelayTime::create(m_accDropDur),
+		CCSequence* pSqe = CCSequence::create(CCDelayTime::create(m_dropDelayTime),
 											  CCMoveBy::create(0.1f,ccp(0.0f,-m_blockSize)), 
 											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::curTetrominoMove)),
 											  NULL);
@@ -101,7 +98,7 @@ void BackgroundBoard::curTetrominoMove()
 
 	else
 	{
-		CCSequence* pSeq = CCSequence::create(CCDelayTime::create(m_accDropDur),
+		CCSequence* pSeq = CCSequence::create(CCDelayTime::create(m_dropDelayTime),
 											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::setNextTetromino)),
 											  NULL);
 		this->runAction(pSeq);
@@ -118,7 +115,7 @@ void BackgroundBoard::setNextTetromino()
 	{
 		int col = m_curTetromino->getCol();
 		int row = m_curTetromino->getRow();
-		CCSequence* pSqe = CCSequence::create(CCDelayTime::create(m_accDropDur),
+		CCSequence* pSqe = CCSequence::create(CCDelayTime::create(m_dropDelayTime),
 											  CCMoveBy::create(0.1f,ccp(0.0f,-m_blockSize)), 
 											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::curTetrominoMove)),
 											  NULL);
@@ -144,7 +141,7 @@ bool BackgroundBoard::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	if(point.x>-12*m_blockSize && point.x<0.0f &&  
 	   point.y>0.0f && point.y<20.0f*m_blockSize)
 	{
-		m_touchPos  = pTouch->getLocation();
+		m_touchPos  = this->convertToNodeSpace(pTouch->getLocation());
 		m_bAccAction  = true;
 		return true;
 	}
@@ -157,9 +154,9 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	if(m_bGameOver || !m_curTetromino)
 		return ;
 
-	CCPoint localtion = pTouch->getLocation();
-
-	if(m_bAccAction && pTouch->getDelta().y<-m_actSensitivity)
+	CCPoint localtion = this->convertToNodeSpace(pTouch->getLocation());
+	
+	if(m_bAccAction && m_touchPos.y - localtion.y>m_blockSize*4)
 	{
 		gotoTargetPos();
 		m_bAccAction = false;
@@ -167,7 +164,7 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	}
 	
 	float correct = TouchCorrect[m_curTetromino->getShape()][m_curTetromino->getRotate()];
-	float targetX = this->convertToNodeSpace(localtion).x;
+	float targetX = localtion.x;
 	targetX += correct*m_blockSize;
 	float posX    = -m_curTetromino->getCol() * m_blockSize;
 
@@ -179,11 +176,12 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 				break;
 
 			posX+=m_blockSize;
+			m_bAccAction = false;
 		}
 
 		m_curTetromino->setPositionX(posX);
 		setTargetBlockPos();
-		m_bAccAction = false;
+		
 	}
 	else
 	{
@@ -193,11 +191,11 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 				break;
 
 			posX-=m_blockSize;
+			m_bAccAction = false;
 		}
 
 		m_curTetromino->setPositionX(posX);
 		setTargetBlockPos();
-		m_bAccAction = false;
 	}
 }
 
@@ -220,10 +218,10 @@ void BackgroundBoard::gotoTargetPos()
 
 void BackgroundBoard::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint point = pTouch->getLocation();
+	CCPoint point = this->convertToNodeSpace(pTouch->getLocation());
 	if(m_bAccAction && 
-	   abs(point.x-m_touchPos.x)<m_actSensitivity &&
-	   abs(point.y-m_touchPos.y)<m_actSensitivity)
+	   abs(point.x-m_touchPos.x)<m_blockSize &&
+	   abs(point.y-m_touchPos.y)<m_blockSize)
 	{
 
 		m_curTetromino->clockwiseRotate(m_bgInfo);

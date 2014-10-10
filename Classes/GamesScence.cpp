@@ -23,7 +23,7 @@ bool GamesScence::init()
 
 	setEffectMatrix();
 
-	TouchGroup* ul =TouchGroup::create();
+	TouchGroup* ul = TouchGroup::create();
 	ul->addWidget(GUIReader::shareReader()->widgetFromJsonFile("TetrisUi/TetrisUi.ExportJson"));
 	this->addChild(ul,0);
 
@@ -54,7 +54,7 @@ bool GamesScence::init()
 	m_bgBpard->setScaleX(frameSize.width/BACKGROUND_COL/m_blockSize);
 	m_bgBpard->setScaleY(frameSize.height/BACKGROUND_ROW/m_blockSize);
 	
-	m_bgBpard->setDropDur(0.5f);
+	m_bgBpard->setDropDelayTime(0.5f);
 	m_bgBpard->setClearLineListener(this,clearLine_selector(GamesScence::onAddScore));
 	m_bgBpard->setGameOverListener(this,gameOver_selector(GamesScence::onGameOver));
 
@@ -216,7 +216,7 @@ void GamesScence::onAddScore(int numLineCleared)
 	if(numLineCleared>0)
 	{
 		char str[10];
-		m_score+=((1<<numLineCleared)*100);
+		m_score+=(1<<numLineCleared);
 		sprintf(str,"%d",m_score);
 		m_scoreLabel->setStringValue(str);
 	}

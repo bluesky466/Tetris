@@ -33,11 +33,8 @@ public:
 	void setClearLineListener(CCObject*,SEL_ClearLine);  ///<设置行消除的回调
 	void setGameOverListener(CCObject*,SEL_GameOver);    ///<设置GameOver的回调
 	
-	///设置旋转和直接下落灵的敏度
-	void setActSensitivity(float actSensitivity) {m_actSensitivity = actSensitivity;}
-
 	///设置下落一格的等待时间
-	void setDropDur(float dropDur)				 {m_dropDur = dropDur;}
+	void setDropDelayTime(float dropDur)		 {m_dropDelayTime = dropDur;}
 
 	bool isPause()								 {return m_isPause;}
 
@@ -52,15 +49,13 @@ public:
 	static BackgroundBoard* create(float blockSize,char* fnBlockTex);
 private:
 	char* m_fnBlockTex;
-	float m_dropDur;
-	float m_accDropDur;
-	float m_actSensitivity;
+	float m_dropDelayTime;
 	bool  m_bAccAction;
 	bool  m_bGameOver;
 	bool  m_isPause;
 	int   m_blockSize;
 	int   m_bgInfo[BACKGROUND_ROW];
-	CCPoint m_touchPos;
+	CCPoint       m_touchPos;
 	CCNode*       m_blockSprRow[BACKGROUND_ROW];
 	Tetromino*    m_curTetromino;
 	CCNode*       m_targetBlock;
