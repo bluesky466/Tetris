@@ -65,9 +65,19 @@ bool GamesScence::init()
 	//Àë¿ªÓÎÏ·°´Å¥
 	m_btStart = (UIButton*)m_uiLayer->getWidgetByName("btLeave");
 	m_btStart->addTouchEventListener(this,toucheventselector(GamesScence::btLeaveCallback));
+	
+	//ÅÅÐÐ°ñ
+	m_listRankList = (UIListView*)m_uiLayer->getWidgetByName("listRankList");
+	m_listRankList->setVisible(false);
+	m_listRankList->setTouchEnabled(false);
+	m_list = RankList::create(m_listRankList);
+	this->addChild(m_list);
 
+	//ÓÎÏ·²Ëµ¥
 	m_menuPanel = (UIPanel*)m_uiLayer->getWidgetByName("layMenu");
 
+	//µ×°åµÄ×ÝºáÏß
+	m_imgFrame = (UIImageView*)m_uiLayer->getWidgetByName("imgFrame");
 
 	//ÓÎÏ·µ×°å
 	UIWidget* pFrame = m_uiLayer->getWidgetByName("imgFrame");
@@ -226,8 +236,11 @@ void GamesScence::btMenuCallback(CCObject* pSender,TouchEventType type)
 	if(type == TOUCH_EVENT_ENDED)
 	{
 		m_bgBpard->pasueDrop();
-		m_iGgameRunning = false;
 		setMenuVisible(true);
+		m_listRankList->setVisible(false);
+		m_listRankList->setTouchEnabled(false);
+		m_imgFrame->setVisible(true);
+		m_bgBpard->setVisible(true);
 	}
 }
 
@@ -245,7 +258,12 @@ void GamesScence::btRankListCallback(CCObject* pSender,TouchEventType type)
 {
 	if(type == TOUCH_EVENT_ENDED)
 	{
-		
+		m_list->downloadRankList();
+		m_listRankList->setVisible(true);
+		m_listRankList->setTouchEnabled(true);
+		m_imgFrame->setVisible(false);
+		m_bgBpard->setVisible(false);
+		setMenuVisible(false);
 	}
 }
 
@@ -322,5 +340,15 @@ void GamesScence::setMenuVisible(bool bVisible)
 		pChild = (UIWidget*)m_menuPanel->getChildByTag(1);
 		pChild->setVisible(true);
 		pChild->setTouchEnabled(true);
+	}
+	else if(bVisible && !m_iGgameRunning)
+	{
+		UIWidget* pChild = (UIWidget*)m_menuPanel->getChildByTag(0);
+		pChild->setVisible(true);
+		pChild->setTouchEnabled(true);
+
+		pChild = (UIWidget*)m_menuPanel->getChildByTag(1);
+		pChild->setVisible(false);
+		pChild->setTouchEnabled(false);
 	}
 }

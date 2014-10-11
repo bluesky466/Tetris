@@ -54,7 +54,7 @@
           "sizeType": 0,
           "tag": 0,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 293,
           "x": 148,
@@ -67,7 +67,7 @@
           "fileNameData": {
             "path": "boardBg.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 392,
@@ -108,7 +108,7 @@
           "sizeType": 0,
           "tag": 1,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 320,
           "x": -1,
@@ -121,7 +121,7 @@
           "fileNameData": {
             "path": "mask.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 104,
@@ -162,7 +162,7 @@
           "sizeType": 0,
           "tag": 2,
           "touchAble": true,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 45,
           "x": 297,
@@ -184,13 +184,13 @@
           "normalData": {
             "path": "btMenuNor.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "pressed": null,
           "pressedData": {
             "path": "btMenuCli.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 74,
@@ -209,7 +209,7 @@
           "__type": "ListViewSurrogate:#EditorCommon.JsonModel.Component.GUI",
           "classname": "ListView",
           "name": "listRankList",
-          "ZOrder": 1,
+          "ZOrder": 0,
           "actiontag": 2,
           "anchorPointX": 0,
           "anchorPointY": 0,
@@ -235,7 +235,7 @@
           "sizeType": 0,
           "tag": 20,
           "touchAble": true,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 200,
           "x": 60,
@@ -304,7 +304,7 @@
           "sizeType": 0,
           "tag": 3,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 216,
           "x": 269,
@@ -317,7 +317,7 @@
           "fileNameData": {
             "path": "frame.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 360,
@@ -511,7 +511,7 @@
           "sizeType": 0,
           "tag": 7,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 32,
           "x": 26,
@@ -524,7 +524,7 @@
           "fileNameData": {
             "path": "tip.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 45,
@@ -565,7 +565,7 @@
           "sizeType": 0,
           "tag": 8,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 36,
           "x": 23,
@@ -578,7 +578,7 @@
           "fileNameData": {
             "path": "level.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 37,
@@ -623,7 +623,7 @@
               "sizeType": 0,
               "tag": 0,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 201,
               "x": 103,
@@ -645,13 +645,13 @@
               "normalData": {
                 "path": "startGameNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "startGameCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 51,
@@ -696,7 +696,7 @@
               "sizeType": 0,
               "tag": 1,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 201,
               "x": 105,
@@ -718,13 +718,13 @@
               "normalData": {
                 "path": "continueGameNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "continueGameCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 51,
@@ -769,7 +769,7 @@
               "sizeType": 0,
               "tag": 2,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 144,
               "x": 98,
@@ -791,13 +791,13 @@
               "normalData": {
                 "path": "rankListNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "rankListCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 47,
@@ -842,7 +842,7 @@
               "sizeType": 0,
               "tag": 3,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 105,
               "x": 97,
@@ -864,13 +864,13 @@
               "normalData": {
                 "path": "helpNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "helpCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 50,
@@ -915,7 +915,7 @@
               "sizeType": 0,
               "tag": 4,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 198,
               "x": 98,
@@ -937,13 +937,13 @@
               "normalData": {
                 "path": "leaveNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "leaveCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 48,
@@ -985,7 +985,7 @@
           "sizeType": 0,
           "tag": 9,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 200,
           "x": 61,
@@ -1046,7 +1046,7 @@
       "sizeType": 0,
       "tag": 3,
       "touchAble": true,
-      "useMergedTexture": true,
+      "useMergedTexture": false,
       "visible": true,
       "width": 320,
       "x": 0,
@@ -1056,7 +1056,7 @@
       "backGroundImageData": {
         "path": "TetrisUiRes/gameBg.png",
         "plistFile": "",
-        "resourceType": 1
+        "resourceType": 0
       },
       "backGroundScale9Enable": false,
       "bgColorB": 255,

@@ -5,6 +5,7 @@
 #include "cocos-ext.h"
 #include "BackgroundBoard.h"
 #include "FragmentEffect.h"
+#include "RankList.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -40,7 +41,9 @@ private:
 	UIButton*        m_btRankList;
 	UIButton*        m_btHelp;
 	UIButton*        m_btLeave;
-	
+	UIImageView*     m_imgFrame;
+	UIListView*		 m_listRankList;
+	RankList*        m_list;
 
 	int   m_score;
 	float m_blockSize;

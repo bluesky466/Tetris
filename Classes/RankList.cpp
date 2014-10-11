@@ -1,35 +1,43 @@
 #include "RankList.h"
 
-bool RankList::init()
+RankList* RankList::create(UIListView* list)
+{ 
+    RankList *pRet = new RankList(); 
+    if (pRet && pRet->init(list)) 
+    { 
+        pRet->autorelease(); 
+        return pRet; 
+    } 
+    else
+    { 
+        delete pRet; 
+        pRet = NULL; 
+        return NULL; 
+    } 
+}
+
+bool RankList::init(UIListView* list)
 {
 	if(!CCNode::init())
 		return false;
 
 	HttpTool::getInstance()->getScoreList(this,getScoreList_selector(RankList::response));
 
-	m_listLayer = 0;
+	m_list = list;
 
 	return true;
 }
 
 void RankList::response(const std::vector<std::string>& nickNames,const std::vector<int>& scores)
 {
-	if(m_listLayer)
-		this->removeChild(m_listLayer);
+	if(!m_list)
+		return ;
 
-	m_listLayer = UILayer::create();
-	m_listLayer->addWidget(GUIReader::shareReader()->widgetFromJsonFile("RankListUi.ExportJson"));
-	this->addChild(m_listLayer);
+	m_list->removeAllItems();
 
-	UIListView* list = (UIListView*)m_listLayer->getWidgetByName("ranklist");
 	for(int i = 0 ; i<nickNames.size() ; ++i)
 	{
-		UIWidget* item;
-
-		if(i%2)
-			item = GUIReader::shareReader()->widgetFromJsonFile("DoubleLine/DoubleLine.ExportJson");
-		else
-			item = GUIReader::shareReader()->widgetFromJsonFile("SingleLineUi/SingleLineUi.ExportJson");
+		UIWidget* item = GUIReader::shareReader()->widgetFromJsonFile("RankListItem/RankListItem.ExportJson");
 
 		UILabelAtlas* atl = (UILabelAtlas*)item->getChildByName("index");
 		CCString str;
@@ -43,6 +51,6 @@ void RankList::response(const std::vector<std::string>& nickNames,const std::vec
 		UILabel* lab = (UILabel*)item->getChildByName("nickname");
 		lab->setText(nickNames[i].c_str());
 
-		list->insertCustomItem(item,i);
+		m_list->insertCustomItem(item,i);
 	}
 }

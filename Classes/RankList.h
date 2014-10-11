@@ -13,7 +13,7 @@ using namespace ui;
 class RankList : public CCNode
 {
 public:
-	bool init();
+	bool init(UIListView* list);
 	void response(const std::vector<std::string>&,const std::vector<int>&);
 
 	void downloadRankList()
@@ -21,10 +21,10 @@ public:
 		HttpTool::getInstance()->getScoreList(this,getScoreList_selector(RankList::response));
 	}
 
-	CREATE_FUNC(RankList);
+	static RankList* create(UIListView* list);
+
 private:
-	
-	UILayer* m_listLayer;
+	UIListView* m_list;
 };
 
 #endif

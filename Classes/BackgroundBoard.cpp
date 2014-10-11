@@ -35,6 +35,7 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 	m_gameOverListener  = 0;
 	m_gameOverCallback  = 0;
 	m_targetBlock       = 0;
+	m_curTetromino      = 0;
 
 	return true;
 }

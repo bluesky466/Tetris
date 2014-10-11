@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<UIProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ProjectDir>F:\CocostudioProjects\RankListItem</ProjectDir>
+  <Version>1.4.0.1</Version>
+  <Resources>F:\CocostudioProjects\RankListItem\Resources</Resources>
+  <Name>RankListItem</Name>
+  <JsonFileName>RankListItem.json</JsonFileName>
+  <JsonFolder>F:\CocostudioProjects\RankListItem\Json</JsonFolder>
+  <JsonList>
+    <string>RankListItem.json</string>
+  </JsonList>
+  <CanvasSize>
+    <Width>0</Width>
+    <Height>0</Height>
+  </CanvasSize>
+  <filePath>F:\CocostudioProjects\RankListItem\RankListItem.xml.ui</filePath>
+  <ProjectType>UIProject</ProjectType>
+  <ResRelativePath />
+  <imageFileList>
+    <string>RankListItem0.plist</string>
+  </imageFileList>
+  <imagePngList>
+    <string>RankListItem0.png</string>
+  </imagePngList>
+  <JsonSuffix>.json</JsonSuffix>
+  <CurrentUIJson>RankListItem.json</CurrentUIJson>
+</UIProject>
