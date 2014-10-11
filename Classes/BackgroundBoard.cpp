@@ -133,7 +133,7 @@ void BackgroundBoard::setNextTetromino()
 
 bool BackgroundBoard::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	if(m_bGameOver || !m_curTetromino)
+	if(m_bGameOver || m_isPause || !m_curTetromino)
 		return false;
 
 	CCPoint point = this->convertToNodeSpace(pTouch->getLocation());
