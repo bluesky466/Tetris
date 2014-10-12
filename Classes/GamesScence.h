@@ -26,7 +26,7 @@ public:
     void onAddScore(int numLineCleared);
 	void onGameOver();
     void closeCallback(CCObject* pSender);
-
+	void getPositionResponse(int score);
     CREATE_FUNC(GamesScence);
 
 private:

@@ -154,3 +154,53 @@ void HttpTool::getScoreListResponse(CCNode* pObject, void* pData)
 		m_getScoreListSelector = 0;
 	}
 }
+
+void HttpTool::getPosition(int score, cocos2d::CCObject* pTarget, SEL_GetPosition pSelector)
+{
+	char strScore[20];
+	sprintf(strScore,"%d",score);
+
+	string url = "http://tetrisrankinglist.jd-app.com/getposition.php?SCORE=";
+	url+=strScore;
+
+	CCHttpRequest* request = new CCHttpRequest();  
+	request->setUrl(url.c_str());
+	request->setRequestType(CCHttpRequest::kHttpGet);  
+	request->setResponseCallback(this,callfuncND_selector(HttpTool::getPositionResponse));
+	request->setTag("getPosition");
+	CCHttpClient::getInstance()->send(request);  
+	request->release();
+
+	m_getPositionTarget   = pTarget;
+	m_getPositionSelector = pSelector;
+}
+
+void HttpTool::getPositionResponse(CCNode* pObject, void* pData)
+{
+	CCHttpResponse *response = (CCHttpResponse*)pData;  
+
+    if(!response ||!response->isSucceed())
+	{
+		if(m_uploadScoreTarget && m_uploadScoreSelector)
+		{
+			(m_getPositionTarget->*m_getPositionSelector)(-1);
+			m_getPositionTarget   = 0;
+			m_getPositionSelector = 0;
+		}
+        return;
+	}
+  
+    std::vector<char> *buffer = response->getResponseData();   
+	std::string result;
+    for (unsigned int i = 0; i < buffer->size(); i++)  
+		result+=(*buffer)[i];
+
+	
+	if(m_getPositionTarget && m_getPositionSelector)
+	{
+		(m_getPositionTarget->*m_getPositionSelector)(atoi(result.c_str()));
+		m_getPositionTarget   = 0;
+		m_getPositionSelector = 0;
+	}
+	
+}

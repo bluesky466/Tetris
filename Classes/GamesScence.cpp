@@ -93,7 +93,7 @@ bool GamesScence::init()
 	m_bgBpard->setGameOverListener(this,gameOver_selector(GamesScence::onGameOver));
 
 	m_uiLayer->getWidgetByName("root")->addNode(m_bgBpard,0);
-
+	
     return true;
 }
 
@@ -351,4 +351,11 @@ void GamesScence::setMenuVisible(bool bVisible)
 		pChild->setVisible(false);
 		pChild->setTouchEnabled(false);
 	}
+}
+
+void GamesScence::getPositionResponse(int score)
+{
+	CCString str;
+	str.initWithFormat("%d",score);
+	CCMessageBox(str.getCString(),"");
 }

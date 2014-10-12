@@ -53,6 +53,7 @@ private:
 	bool  m_bAccAction;
 	bool  m_bGameOver;
 	bool  m_isPause;
+	bool  m_bAccMove;
 	int   m_blockSize;
 	int   m_bgInfo[BACKGROUND_ROW];
 	CCPoint       m_touchPos;

@@ -143,7 +143,8 @@ bool BackgroundBoard::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	   point.y>0.0f && point.y<20.0f*m_blockSize)
 	{
 		m_touchPos  = this->convertToNodeSpace(pTouch->getLocation());
-		m_bAccAction  = true;
+		m_bAccAction = true;
+		m_bAccMove   = false;
 		return true;
 	}
 
@@ -169,35 +170,42 @@ void BackgroundBoard::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	targetX += correct*m_blockSize;
 	float posX    = -m_curTetromino->getCol() * m_blockSize;
 
-	if(posX < targetX)
+	if(abs(localtion.x-m_touchPos.x)>m_blockSize)
+		m_bAccMove = true;
+	
+	if(m_bAccMove)
 	{
-		while(posX+m_blockSize < targetX)
+		if(posX < targetX)
 		{
-			if(!m_curTetromino->move(false,m_bgInfo))
-				break;
+			while(posX+m_blockSize < targetX)
+			{
+				if(!m_curTetromino->move(false,m_bgInfo))
+					break;
 
-			posX+=m_blockSize;
-			m_bAccAction = false;
-		}
+				posX+=m_blockSize;
+				m_bAccAction = false;
+			}
 
-		m_curTetromino->setPositionX(posX);
-		setTargetBlockPos();
+			m_curTetromino->setPositionX(posX);
+			setTargetBlockPos();
 		
-	}
-	else
-	{
-		while(posX-m_blockSize > targetX)
-		{
-			if(!m_curTetromino->move(true,m_bgInfo))
-				break;
-
-			posX-=m_blockSize;
-			m_bAccAction = false;
 		}
+		else
+		{
+			while(posX-m_blockSize > targetX)
+			{
+				if(!m_curTetromino->move(true,m_bgInfo))
+					break;
 
-		m_curTetromino->setPositionX(posX);
-		setTargetBlockPos();
+				posX-=m_blockSize;
+				m_bAccAction = false;
+			}
+
+			m_curTetromino->setPositionX(posX);
+			setTargetBlockPos();
+		}
 	}
+	
 }
 
 void BackgroundBoard::gotoTargetPos()
