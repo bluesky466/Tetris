@@ -54,7 +54,7 @@
           "sizeType": 0,
           "tag": 0,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 293,
           "x": 148,
@@ -67,7 +67,7 @@
           "fileNameData": {
             "path": "boardBg.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 392,
@@ -108,7 +108,7 @@
           "sizeType": 0,
           "tag": 1,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 320,
           "x": -1,
@@ -121,7 +121,7 @@
           "fileNameData": {
             "path": "mask.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 104,
@@ -162,7 +162,7 @@
           "sizeType": 0,
           "tag": 2,
           "touchAble": true,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 45,
           "x": 297,
@@ -184,13 +184,13 @@
           "normalData": {
             "path": "btMenuNor.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "pressed": null,
           "pressedData": {
             "path": "btMenuCli.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 74,
@@ -235,7 +235,7 @@
           "sizeType": 0,
           "tag": 20,
           "touchAble": true,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 200,
           "x": 60,
@@ -304,7 +304,7 @@
           "sizeType": 0,
           "tag": 3,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 216,
           "x": 269,
@@ -317,7 +317,7 @@
           "fileNameData": {
             "path": "frame.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 360,
@@ -511,7 +511,7 @@
           "sizeType": 0,
           "tag": 7,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 32,
           "x": 26,
@@ -524,7 +524,7 @@
           "fileNameData": {
             "path": "tip.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 45,
@@ -565,7 +565,7 @@
           "sizeType": 0,
           "tag": 8,
           "touchAble": false,
-          "useMergedTexture": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 36,
           "x": 23,
@@ -578,7 +578,7 @@
           "fileNameData": {
             "path": "level.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "scale9Enable": false,
           "scale9Height": 37,
@@ -623,7 +623,7 @@
               "sizeType": 0,
               "tag": 0,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 201,
               "x": 103,
@@ -645,13 +645,13 @@
               "normalData": {
                 "path": "startGameNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "startGameCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 51,
@@ -696,7 +696,7 @@
               "sizeType": 0,
               "tag": 1,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 201,
               "x": 105,
@@ -718,13 +718,13 @@
               "normalData": {
                 "path": "continueGameNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "continueGameCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 51,
@@ -769,7 +769,7 @@
               "sizeType": 0,
               "tag": 2,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 144,
               "x": 98,
@@ -791,13 +791,13 @@
               "normalData": {
                 "path": "rankListNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "rankListCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 47,
@@ -842,7 +842,7 @@
               "sizeType": 0,
               "tag": 3,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 105,
               "x": 97,
@@ -864,13 +864,13 @@
               "normalData": {
                 "path": "helpNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "helpCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 50,
@@ -915,7 +915,7 @@
               "sizeType": 0,
               "tag": 4,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 198,
               "x": 98,
@@ -937,13 +937,13 @@
               "normalData": {
                 "path": "leaveNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "leaveCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 48,
@@ -985,8 +985,8 @@
           "sizeType": 0,
           "tag": 9,
           "touchAble": false,
-          "useMergedTexture": true,
-          "visible": true,
+          "useMergedTexture": false,
+          "visible": false,
           "width": 200,
           "x": 61,
           "y": 120,
@@ -1053,7 +1053,7 @@
               "sizeType": 0,
               "tag": 0,
               "touchAble": false,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 236,
               "x": 99,
@@ -1066,7 +1066,7 @@
               "fileNameData": {
                 "path": "gameover.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 54,
@@ -1107,7 +1107,7 @@
               "sizeType": 0,
               "tag": 1,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 174,
               "x": 98,
@@ -1129,13 +1129,13 @@
               "normalData": {
                 "path": "restartNor.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "pressed": null,
               "pressedData": {
                 "path": "restartCli.png",
                 "plistFile": "",
-                "resourceType": 1
+                "resourceType": 0
               },
               "scale9Enable": false,
               "scale9Height": 51,
@@ -1177,8 +1177,8 @@
           "sizeType": 0,
           "tag": 35,
           "touchAble": false,
-          "useMergedTexture": true,
-          "visible": true,
+          "useMergedTexture": false,
+          "visible": false,
           "width": 200,
           "x": 65,
           "y": 76,
@@ -1235,7 +1235,7 @@
               "layoutParameter": null,
               "opacity": 255,
               "positionPercentX": 0.5590906,
-              "positionPercentY": 0.585000157,
+              "positionPercentY": 0.550000131,
               "positionType": 0,
               "rotation": 0,
               "scaleX": 0.35,
@@ -1249,7 +1249,7 @@
               "visible": true,
               "width": 165,
               "x": 111,
-              "y": 117,
+              "y": 110,
               "charMapFile": null,
               "charMapFileData": {
                 "path": "number.png",
@@ -1285,8 +1285,8 @@
               "ignoreSize": true,
               "layoutParameter": null,
               "opacity": 255,
-              "positionPercentX": 0.471363842,
-              "positionPercentY": 0.183636412,
+              "positionPercentX": 0.53636384,
+              "positionPercentY": -0.0863635838,
               "positionType": 0,
               "rotation": 0,
               "scaleX": 1,
@@ -1296,11 +1296,11 @@
               "sizeType": 0,
               "tag": 1,
               "touchAble": true,
-              "useMergedTexture": true,
+              "useMergedTexture": false,
               "visible": true,
               "width": 200,
-              "x": 94,
-              "y": 36,
+              "x": 107,
+              "y": -17,
               "areaHeight": 0,
               "areaWidth": 0,
               "fontFile": null,
@@ -1313,85 +1313,12 @@
               "placeHolder": "点击这里输入昵称吧！",
               "text": ""
             }
-          },
-          {
-            "classname": "Button",
-            "name": null,
-            "children": [],
-            "options": {
-              "__type": "ButtonSurrogate:#EditorCommon.JsonModel.Component.GUI",
-              "classname": "Button",
-              "name": "btConfirmation",
-              "ZOrder": 0,
-              "actiontag": 13,
-              "anchorPointX": 0.5,
-              "anchorPointY": 0.5,
-              "classType": "CocoStudio.EngineAdapterWrap.CSButton",
-              "colorB": 255,
-              "colorG": 255,
-              "colorR": 255,
-              "customProperty": "",
-              "flipX": false,
-              "flipY": false,
-              "height": 41,
-              "ignoreSize": true,
-              "layoutParameter": null,
-              "opacity": 255,
-              "positionPercentX": 0.505,
-              "positionPercentY": -0.03,
-              "positionType": 0,
-              "rotation": 0,
-              "scaleX": 1,
-              "scaleY": 1,
-              "sizePercentX": 0.515,
-              "sizePercentY": 0.2,
-              "sizeType": 0,
-              "tag": 2,
-              "touchAble": true,
-              "useMergedTexture": true,
-              "visible": true,
-              "width": 98,
-              "x": 101,
-              "y": -6,
-              "capInsetsHeight": 1,
-              "capInsetsWidth": 1,
-              "capInsetsX": 0,
-              "capInsetsY": 0,
-              "disabled": null,
-              "disabledData": {
-                "path": null,
-                "plistFile": null,
-                "resourceType": 0
-              },
-              "fontName": "微软雅黑",
-              "fontSize": 14,
-              "fontType": 0,
-              "normal": null,
-              "normalData": {
-                "path": "confirmationNor.png",
-                "plistFile": "",
-                "resourceType": 1
-              },
-              "pressed": null,
-              "pressedData": {
-                "path": "confirmationCli.png",
-                "plistFile": "",
-                "resourceType": 1
-              },
-              "scale9Enable": false,
-              "scale9Height": 41,
-              "scale9Width": 98,
-              "text": "",
-              "textColorB": 255,
-              "textColorG": 255,
-              "textColorR": 255
-            }
           }
         ],
         "options": {
           "__type": "PanelSurrogate:#EditorCommon.JsonModel.Component.GUI",
           "classname": "Panel",
-          "name": "layUploadScore",
+          "name": "uploadScorePanel",
           "ZOrder": 4,
           "actiontag": 7,
           "anchorPointX": 0,
@@ -1407,7 +1334,7 @@
           "ignoreSize": false,
           "layoutParameter": null,
           "opacity": 255,
-          "positionPercentX": 0.190056846,
+          "positionPercentX": 0.161931843,
           "positionPercentY": 0.200757563,
           "positionType": 0,
           "rotation": 0,
@@ -1417,18 +1344,18 @@
           "sizePercentY": 0.416666657,
           "sizeType": 0,
           "tag": 36,
-          "touchAble": false,
-          "useMergedTexture": true,
+          "touchAble": true,
+          "useMergedTexture": false,
           "visible": true,
           "width": 200,
-          "x": 60,
+          "x": 51,
           "y": 96,
           "adaptScreen": false,
           "backGroundImage": null,
           "backGroundImageData": {
             "path": "uploadScoreBg.png",
             "plistFile": "",
-            "resourceType": 1
+            "resourceType": 0
           },
           "backGroundScale9Enable": false,
           "bgColorB": 255,
@@ -1483,7 +1410,7 @@
       "sizeType": 0,
       "tag": 3,
       "touchAble": true,
-      "useMergedTexture": true,
+      "useMergedTexture": false,
       "visible": true,
       "width": 320,
       "x": 0,
@@ -1493,7 +1420,7 @@
       "backGroundImageData": {
         "path": "TetrisUiRes/gameBg.png",
         "plistFile": "",
-        "resourceType": 1
+        "resourceType": 0
       },
       "backGroundScale9Enable": false,
       "bgColorB": 255,

@@ -79,6 +79,19 @@ bool GamesScence::init()
 	//底板的纵横线
 	m_imgFrame = (UIImageView*)m_uiLayer->getWidgetByName("imgFrame");
 
+	//GameOver菜单
+	m_gamrOverPanel = (UIPanel*)m_uiLayer->getWidgetByName("layGameOver");
+	UIButton* restart = (UIButton*)m_uiLayer->getWidgetByName("btRestart");
+	restart->addTouchEventListener(this,toucheventselector(GamesScence::btRestartCallback));
+	setGameOverPanelVisible(false);
+
+	//上传分数面板
+	m_uploadScorePanel = (UIPanel*)m_uiLayer->getWidgetByName("layUploadScore");
+	m_nickNameInput = (UITextField*)m_uiLayer->getWidgetByName("tfNickName");
+	UIButton* btConfirmation = (UIButton*)m_uiLayer->getWidgetByName("btConfirmation");
+	btConfirmation->addTouchEventListener(this,toucheventselector(GamesScence::btConfirmationCallback));
+	setUploadScorePanelVisible(0,false);
+
 	//游戏底板
 	UIWidget* pFrame = m_uiLayer->getWidgetByName("imgFrame");
 	CCSize frameSize = pFrame->getContentSize();
@@ -228,6 +241,22 @@ void GamesScence::btStartCallback(CCObject* pSender,TouchEventType type)
 		m_bgBpard->start();
 		m_iGgameRunning = true;
 		setMenuVisible(false);
+
+		m_score = 0;
+		m_scoreLabel->setStringValue("0");
+	}
+}
+
+void GamesScence::btRestartCallback(CCObject* pSender,TouchEventType type)
+{
+	if(type == TOUCH_EVENT_ENDED)
+	{
+		m_bgBpard->start();
+		m_iGgameRunning = true;
+		setGameOverPanelVisible(false);
+
+		m_score = 0;
+		m_scoreLabel->setStringValue("0");
 	}
 }
 
@@ -237,6 +266,8 @@ void GamesScence::btMenuCallback(CCObject* pSender,TouchEventType type)
 	{
 		m_bgBpard->pasueDrop();
 		setMenuVisible(true);
+		setGameOverPanelVisible(false);
+
 		m_listRankList->setVisible(false);
 		m_listRankList->setTouchEnabled(false);
 		m_imgFrame->setVisible(true);
@@ -274,6 +305,25 @@ void GamesScence::btHelpCallback(CCObject* pSender,TouchEventType type)
 		
 	}
 }
+void GamesScence::btConfirmationCallback(CCObject* pSender,TouchEventType type)
+{
+	if(type == TOUCH_EVENT_ENDED)
+	{
+		std::string nickName = m_nickNameInput->getStringValue();
+		HttpTool::getInstance()->uploadScore(nickName.c_str(),m_score,this,uploadScore_selector(GamesScence::uploadScoreResponse));
+	}
+}
+
+void GamesScence::uploadScoreResponse(bool b)
+{
+	if(b)
+	{
+		CCMessageBox("OK!","OK");
+		setUploadScorePanelVisible(0,false);
+	}
+	else
+		CCMessageBox("Failure!","Failure");
+}
 
 void GamesScence::btLeaveCallback(CCObject* pSender,TouchEventType type)
 {
@@ -303,8 +353,7 @@ void GamesScence::onAddScore(int numLineCleared)
 void GamesScence::onGameOver()
 {
 	m_iGgameRunning = false;
-	CCMessageBox("GameOver","GameOver");
-	m_btStart->setTitleText("start");
+	setGameOverPanelVisible(true);
 
 	int highestScore = CCUserDefault::sharedUserDefault()->getIntegerForKey("TheHighestScore",0);
 
@@ -317,6 +366,36 @@ void GamesScence::onGameOver()
 	char strHighest[20];
 	sprintf(strHighest,"%d",highestScore);
 	m_highestLabel->setStringValue(strHighest);
+	HttpTool::getInstance()->getPosition(m_score,this,getPosition_selector(GamesScence::getPositionResponse));
+}
+
+void GamesScence::setGameOverPanelVisible(bool bVisible)
+{
+	m_gamrOverPanel->setVisible(bVisible);
+	for(int i =0 ; i<2 ; ++i)
+	{
+		UIWidget* pChild = (UIWidget*)m_gamrOverPanel->getChildByTag(i);
+		pChild->setVisible(bVisible);
+		pChild->setTouchEnabled(bVisible);
+	}
+}
+
+void GamesScence::setUploadScorePanelVisible(int position,bool bVisible)
+{
+	m_uploadScorePanel->setVisible(bVisible);
+	for(int i =0 ; i<3 ; ++i)
+	{
+		UIWidget* pChild = (UIWidget*)m_uploadScorePanel->getChildByTag(i);
+		pChild->setVisible(bVisible);
+		pChild->setTouchEnabled(bVisible);
+	}
+
+	if(bVisible)
+	{
+		char str[20];
+		sprintf(str,"%d",position);
+		((UILabelAtlas*)m_uploadScorePanel->getChildByTag(0))->setStringValue(str);
+	}
 }
 
 void GamesScence::setMenuVisible(bool bVisible)
@@ -353,9 +432,8 @@ void GamesScence::setMenuVisible(bool bVisible)
 	}
 }
 
-void GamesScence::getPositionResponse(int score)
+void GamesScence::getPositionResponse(int position)
 {
-	CCString str;
-	str.initWithFormat("%d",score);
-	CCMessageBox(str.getCString(),"");
+	if(position>0 && position<=100)
+		setUploadScorePanelVisible(position,true);
 }
