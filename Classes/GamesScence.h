@@ -25,6 +25,7 @@ public:
 	void btHelpCallback(CCObject* pSender,TouchEventType type);
 	void btLeaveCallback(CCObject* pSender,TouchEventType type);
 	void btConfirmationCallback(CCObject* pSender,TouchEventType type);
+	void btCancelCallback(CCObject* pSender,TouchEventType type);
     void onAddScore(int numLineCleared);
 	void onGameOver();
     void closeCallback(CCObject* pSender);

@@ -90,6 +90,8 @@ bool GamesScence::init()
 	m_nickNameInput = (UITextField*)m_uiLayer->getWidgetByName("tfNickName");
 	UIButton* btConfirmation = (UIButton*)m_uiLayer->getWidgetByName("btConfirmation");
 	btConfirmation->addTouchEventListener(this,toucheventselector(GamesScence::btConfirmationCallback));
+	UIButton* btCancel = (UIButton*)m_uiLayer->getWidgetByName("btCancel");
+	btCancel->addTouchEventListener(this,toucheventselector(GamesScence::btCancelCallback));
 	setUploadScorePanelVisible(0,false);
 
 	//ÓÎÏ·µ×°å
@@ -311,6 +313,14 @@ void GamesScence::btConfirmationCallback(CCObject* pSender,TouchEventType type)
 	{
 		std::string nickName = m_nickNameInput->getStringValue();
 		HttpTool::getInstance()->uploadScore(nickName.c_str(),m_score,this,uploadScore_selector(GamesScence::uploadScoreResponse));
+	}
+}
+
+void GamesScence::btCancelCallback(CCObject* pSender,TouchEventType type)
+{
+	if(type == TOUCH_EVENT_ENDED)
+	{
+		setUploadScorePanelVisible(0,false);
 	}
 }
 
