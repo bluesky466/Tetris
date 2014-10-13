@@ -11,6 +11,9 @@ USING_NS_CC;
 typedef void (CCObject::*SEL_ClearLine)(int numLine);
 #define clearLine_selector(_SELECTOR) (SEL_ClearLine)(&_SELECTOR)
 
+typedef void (CCObject::*SEL_NextBlock)(int);
+#define nextBlock_selector(_SELECTOR) (SEL_NextBlock)(&_SELECTOR)
+
 typedef void (CCObject::*SEL_GameOver)();
 #define gameOver_selector(_SELECTOR) (SEL_GameOver)(&_SELECTOR)
 
@@ -32,6 +35,12 @@ public:
 	
 	void setClearLineListener(CCObject*,SEL_ClearLine);  ///<设置行消除的回调
 	void setGameOverListener(CCObject*,SEL_GameOver);    ///<设置GameOver的回调
+
+	/**
+	 *  设置下一个方块编号改变的回调
+	 *  用于提示玩家下一个方块是什么形状的
+	 */
+	void setNextBlockListener(CCObject*,SEL_NextBlock);   
 	
 	///设置下落一格的等待时间
 	void setDropDelayTime(float dropDur)		 {m_dropDelayTime = dropDur;}
@@ -56,6 +65,7 @@ private:
 	bool  m_bAccMove;
 	int   m_blockSize;
 	int   m_bgInfo[BACKGROUND_ROW];
+	int   m_nextBlock;
 	CCPoint       m_touchPos;
 	CCNode*       m_blockSprRow[BACKGROUND_ROW];
 	Tetromino*    m_curTetromino;
@@ -64,6 +74,8 @@ private:
 	SEL_ClearLine m_clearLineCallback;
 	CCObject*     m_gameOverListener;
 	SEL_GameOver  m_gameOverCallback;
+	CCObject*     m_nextBlockListener;
+	SEL_NextBlock m_nextBlockCallback;
 
 
 	int  clearLine();          ///<消除满方块的行
@@ -86,4 +98,9 @@ inline void BackgroundBoard::setGameOverListener(CCObject* pObject,SEL_GameOver 
 	m_gameOverCallback = callback;
 }
 
+inline void BackgroundBoard::setNextBlockListener(CCObject* pObject,SEL_NextBlock callback)
+{
+	m_nextBlockListener = pObject;
+	m_nextBlockCallback = callback;
+}
 #endif

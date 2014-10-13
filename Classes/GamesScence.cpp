@@ -20,6 +20,7 @@ bool GamesScence::init()
 	m_score     = 0;
 	m_blockSize = 20.0f;
 	m_iGgameRunning = false;
+	m_nextTetromino = 0;
 
 	setEffectMatrix();
 
@@ -85,6 +86,9 @@ bool GamesScence::init()
 	restart->addTouchEventListener(this,toucheventselector(GamesScence::btRestartCallback));
 	setGameOverPanelVisible(false);
 
+	//下一个方块的提示
+	m_nextTip = (UIImageView*)m_uiLayer->getWidgetByName("imgTip");
+
 	//上传分数面板
 	m_uploadScorePanel = (UIPanel*)m_uiLayer->getWidgetByName("layUploadScore");
 	m_nickNameInput = (UITextField*)m_uiLayer->getWidgetByName("tfNickName");
@@ -105,8 +109,8 @@ bool GamesScence::init()
 	
 	m_bgBpard->setDropDelayTime(0.5f);
 	m_bgBpard->setClearLineListener(this,clearLine_selector(GamesScence::onAddScore));
+	m_bgBpard->setNextBlockListener(this,nextBlock_selector(GamesScence::onNextBlock));
 	m_bgBpard->setGameOverListener(this,gameOver_selector(GamesScence::onGameOver));
-
 	m_uiLayer->getWidgetByName("root")->addNode(m_bgBpard,0);
 	
     return true;
@@ -359,6 +363,22 @@ void GamesScence::onAddScore(int numLineCleared)
 		m_scoreLabel->setStringValue(str);
 	}
 }
+
+void GamesScence::onNextBlock(int next)
+{
+	m_nextTip->setVisible(false);
+	if(m_nextTetromino)
+		this->removeChild(m_nextTetromino);
+
+	m_nextTetromino = Tetromino::create(next,m_blockSize,"block.png");
+	m_nextTetromino->setPosition(m_nextTip->getPosition());
+	CCSize oriSize = m_nextTetromino->getContentSize();
+	CCSize targetSize = m_nextTip->getContentSize();
+	m_nextTetromino->setScaleX(targetSize.width/oriSize.width);
+	m_nextTetromino->setScaleX(targetSize.height/oriSize.height);
+	m_uiLayer->getWidgetByName("root")->addNode(m_nextTetromino,6);
+}
+
 
 void GamesScence::onGameOver()
 {

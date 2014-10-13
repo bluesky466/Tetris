@@ -29,6 +29,7 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 	m_isPause	     = false;
 	m_fnBlockTex     = fnBlockTex;
 	m_blockSize      = blockSize;
+	m_nextBlock      = rand()%7;
 	m_dropDelayTime     = 0.1f;
 	m_clearLineListener = 0;
 	m_clearLineCallback = 0;
@@ -36,13 +37,19 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 	m_gameOverCallback  = 0;
 	m_targetBlock       = 0;
 	m_curTetromino      = 0;
+	m_nextBlockListener = 0;
+	m_nextBlockCallback = 0;
 
 	return true;
 }
 
 void BackgroundBoard::addNewTetromino()
 {
-	m_curTetromino = Tetromino::create(rand()%7,m_blockSize,m_fnBlockTex);
+	m_curTetromino = Tetromino::create(m_nextBlock,m_blockSize,m_fnBlockTex);
+
+	m_nextBlock = rand()%7;
+	if(m_nextBlockListener && m_nextBlockCallback)
+		(m_nextBlockListener->*m_nextBlockCallback)(m_nextBlock);
 
 	int col = m_curTetromino->getCol();
 	int row = m_curTetromino->getRow();

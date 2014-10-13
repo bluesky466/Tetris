@@ -6,6 +6,7 @@
 #include "BackgroundBoard.h"
 #include "FragmentEffect.h"
 #include "RankList.h"
+#include "Tetromino.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -27,6 +28,7 @@ public:
 	void btConfirmationCallback(CCObject* pSender,TouchEventType type);
 	void btCancelCallback(CCObject* pSender,TouchEventType type);
     void onAddScore(int numLineCleared);
+	void onNextBlock(int next);
 	void onGameOver();
     void closeCallback(CCObject* pSender);
 	void getPositionResponse(int score);
@@ -50,7 +52,9 @@ private:
 	UITextField*     m_nickNameInput;
 	UIImageView*     m_imgFrame;
 	UIListView*		 m_listRankList;
+	UIImageView*     m_nextTip;
 	RankList*        m_list;
+	Tetromino*       m_nextTetromino;
 
 	int   m_score;
 	float m_blockSize;
