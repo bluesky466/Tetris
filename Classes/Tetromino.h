@@ -37,7 +37,10 @@ public:
 	int getTargetRow() {return m_targetRow;}  
 
 	///直接降落到可以降落的最底下的一行
-	int  gotoTargetPos();
+	int gotoTargetPos();
+
+	///得到大小
+	CCSize getTetrominoSize();
 
 	///判断是否点击到方块上
 	bool isTouch(CCPoint worldCoord);

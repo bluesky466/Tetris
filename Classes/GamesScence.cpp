@@ -368,14 +368,14 @@ void GamesScence::onNextBlock(int next)
 {
 	m_nextTip->setVisible(false);
 	if(m_nextTetromino)
-		this->removeChild(m_nextTetromino);
+		m_uiLayer->getWidgetByName("root")->removeNode(m_nextTetromino);
 
 	m_nextTetromino = Tetromino::create(next,m_blockSize,"block.png");
 	m_nextTetromino->setPosition(m_nextTip->getPosition());
-	CCSize oriSize = m_nextTetromino->getContentSize();
+
 	CCSize targetSize = m_nextTip->getContentSize();
-	m_nextTetromino->setScaleX(targetSize.width/oriSize.width);
-	m_nextTetromino->setScaleX(targetSize.height/oriSize.height);
+	m_nextTetromino->setScale(targetSize.width/4/m_blockSize);
+	
 	m_uiLayer->getWidgetByName("root")->addNode(m_nextTetromino,6);
 }
 

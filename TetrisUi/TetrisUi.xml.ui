@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <UIProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <ProjectDir>F:\CocostudioProjects\TetrisUi</ProjectDir>
+  <ProjectDir>E:\cocostudioProj\TetrisUi</ProjectDir>
   <Version>1.4.0.1</Version>
-  <Resources>F:\CocostudioProjects\TetrisUi\Resources</Resources>
+  <Resources>E:\cocostudioProj\TetrisUi\Resources</Resources>
   <Name>TetrisUi</Name>
   <JsonFileName>TetrisUi.json</JsonFileName>
-  <JsonFolder>F:\CocostudioProjects\TetrisUi\Json</JsonFolder>
+  <JsonFolder>E:\cocostudioProj\TetrisUi\Json</JsonFolder>
   <JsonList>
     <string>TetrisUi.json</string>
   </JsonList>
@@ -13,7 +13,7 @@
     <Width>320</Width>
     <Height>480</Height>
   </CanvasSize>
-  <filePath>F:\CocostudioProjects\TetrisUi\TetrisUi.xml.ui</filePath>
+  <filePath>E:\cocostudioProj\TetrisUi\TetrisUi.xml.ui</filePath>
   <ProjectType>UIProject</ProjectType>
   <ResRelativePath />
   <imageFileList>

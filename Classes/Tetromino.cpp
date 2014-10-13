@@ -240,6 +240,37 @@ bool Tetromino::isTouch(CCPoint worldCoord)
 	return false;
 }
 
+CCSize Tetromino::getTetrominoSize()
+{
+	int row = 0;
+	int col = 0;
+
+	for(int r = 0 ; r<4 ; ++r)
+		if(TetrominoShape[m_shape][m_rotate][r]!=0)
+		{
+			row = r+1;
+		}
+
+	for(int c = 0 ;c<4 ; ++c)
+	{
+		bool flag = false;
+
+		for(int r = 0 ; r<4 ; ++r)
+		{
+			if(TetrominoShape[m_shape][m_rotate][r] >= (1<<c))
+			{
+				flag = true;
+				break;
+			}
+		}
+
+		if(flag)
+			col = c+1;
+	}
+
+	return ccp(col*m_blockSize,row*m_blockSize);
+}
+
 bool Tetromino::isUnderTetromino(CCPoint worldCoord)
 {
 	for(int i = 0 ; i<4 ; ++i)
