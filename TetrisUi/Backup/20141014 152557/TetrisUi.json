@@ -12,7 +12,9 @@
   "textures": [
     "TetrisUi0.plist"
   ],
-  "texturesPng": [],
+  "texturesPng": [
+    "TetrisUi0.png"
+  ],
   "version": "1.4.0.1",
   "widgetTree": {
     "classname": "Panel",
@@ -1529,7 +1531,7 @@
       "classname": "Panel",
       "name": "root",
       "ZOrder": 0,
-      "actiontag": 1,
+      "actiontag": -1,
       "anchorPointX": 0,
       "anchorPointY": 0,
       "classType": "CocoStudio.EngineAdapterWrap.CSPanel",

@@ -7,6 +7,7 @@
 #include "FragmentEffect.h"
 #include "RankList.h"
 #include "Tetromino.h"
+#include "WidgetManager.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -18,52 +19,88 @@ public:
     virtual bool init();  
 
     static CCScene* scene();
+
+	/*按钮的回调函数*/
+	///菜单按钮
 	void btMenuCallback(CCObject* pSender,TouchEventType type);
+
+	///开始按钮
     void btStartCallback(CCObject* pSender,TouchEventType type);
+
+	///重新开始按钮
 	void btRestartCallback(CCObject* pSender,TouchEventType type);
+
+	///继续游戏按钮
 	void btContinueCallback(CCObject* pSender,TouchEventType type);
+
+	///排行榜按钮
 	void btRankListCallback(CCObject* pSender,TouchEventType type);
+
+	///帮助按钮
 	void btHelpCallback(CCObject* pSender,TouchEventType type);
+
+	///离开游戏按钮
 	void btLeaveCallback(CCObject* pSender,TouchEventType type);
+
+	///确定按钮（上传分数）
 	void btConfirmationCallback(CCObject* pSender,TouchEventType type);
+
+	///取消按钮（上传分数）
 	void btCancelCallback(CCObject* pSender,TouchEventType type);
+
+	/*BackgroundBoard的消息回调*/
+	///加分（有一行或多行被消除）
     void onAddScore(int numLineCleared);
+
+	///提示下个方块的形状
 	void onNextBlock(int next);
+
+	///GameOver
 	void onGameOver();
-    void closeCallback(CCObject* pSender);
+
+	/*HttpTool的消息回调*/
+	///得到排名的回调
 	void getPositionResponse(int score);
+
+	///上传分数的回调
 	void uploadScoreResponse(bool b);
+
     CREATE_FUNC(GamesScence);
 
 private:
-	BackgroundBoard* m_bgBpard;
-	UILabelAtlas*    m_scoreLabel;
-	UILabelAtlas*    m_highestLabel;
-	UILayer*         m_uiLayer;
-	UIPanel*		 m_menuPanel;
-	UIPanel*		 m_gamrOverPanel;
-	UIPanel*		 m_uploadScorePanel;
-	UIButton*        m_btMenu;
-	UIButton*        m_btStart;
-	UIButton*        m_btContinue;
-	UIButton*        m_btRankList;
-	UIButton*        m_btHelp;
-	UIButton*        m_btLeave;
-	UITextField*     m_nickNameInput;
-	UIImageView*     m_imgFrame;
-	UIListView*		 m_listRankList;
-	UIImageView*     m_nextTip;
-	RankList*        m_list;
-	Tetromino*       m_nextTetromino;
 
-	int   m_score;
-	float m_blockSize;
-	bool  m_iGgameRunning;
+	///菜单、排行榜、gameover层、上传分数这些层一次只能出现一个,用它来管理
+	WidgetManager    m_panelManager;
 
+	///<游戏底板,方块的降落、左右移动、旋转等等的逻辑都在这里实现
+	BackgroundBoard* m_bgBpard;       
+
+	UILayer*         m_uiLayer;       ///<从cocostudio加载的游戏UI
+	UILabelAtlas*    m_scoreLabel;    ///<显示分数
+	UILabelAtlas*    m_highestLabel;  ///<显示最高分
+	UILabelAtlas*    m_levelLabel;    ///<提示难度
+	UIButton*        m_btMenu;        ///<菜单按钮
+	UITextField*     m_nickNameInput; ///<输入昵称的输入框
+	UIImageView*     m_imgFrame;      ///<游戏底板的纵横线
+	UIImageView*     m_levelTip;      ///<难度的提示底板
+	UIImageView*     m_nextTip;       ///<下一个方块的提示底板（只是提供一个位置和大小的信息）
+	Tetromino*       m_nextTetromino; ///<下一个方块的提示（显示形状）
+	RankList*        m_list;          ///<排行榜（功能类,与服务器的交互在这里实现）
+
+	int   m_score;          ///<分数
+	float m_blockSize;      ///<方块的大小（那些正方形的边长）
+	float m_dropDelayTime;  ///<方块每下降一格的延迟时间
+	int   m_level;          ///<难度
+	int   m_clearLineCount; ///<清除行的记数
+	bool  m_isGgameRunning; ///<游戏是否正在运行中（用于决定是开始游戏还是继续游戏）
+
+	///设置各个形状的方块的颜色（用特性矩阵实现）
 	void setEffectMatrix();
-	void setMenuVisible(bool bVisible);
-	void setGameOverPanelVisible(bool bVisible);
-	void setUploadScorePanelVisible(int score,bool bVisible);
+
+	void startGame();
+
+	///提示顶板的可见（若可见,则显示“提示”,“难度”这些字）
+	void setTipBoardVisible(bool bVisible);
 };
 
 #endif 

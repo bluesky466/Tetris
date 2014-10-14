@@ -17,10 +17,10 @@ bool GamesScence::init()
         return false;
     }
 
-	m_score     = 0;
-	m_blockSize = 20.0f;
-	m_iGgameRunning = false;
-	m_nextTetromino = 0;
+	m_score          = 0;
+	m_blockSize      = 20.0f;
+	m_isGgameRunning = false;
+	m_nextTetromino  = 0;
 
 	setEffectMatrix();
 
@@ -42,61 +42,47 @@ bool GamesScence::init()
 	//菜单按钮
 	m_btMenu = (UIButton*)m_uiLayer->getWidgetByName("btMenu");
 	m_btMenu->addTouchEventListener(this,toucheventselector(GamesScence::btMenuCallback));
-	m_btMenu->setTouchEnabled(false);
-	m_btMenu->setVisible(false);
-
-	//开始按钮
-	m_btStart = (UIButton*)m_uiLayer->getWidgetByName("btStart");
-	m_btStart->addTouchEventListener(this,toucheventselector(GamesScence::btStartCallback));
-
-	//继续按钮
-	m_btContinue = (UIButton*)m_uiLayer->getWidgetByName("btContinue");
-	m_btContinue->addTouchEventListener(this,toucheventselector(GamesScence::btContinueCallback));
-	m_btContinue->setTouchEnabled(false);
-	m_btContinue->setVisible(false);
-
-	//排行榜按钮
-	m_btStart = (UIButton*)m_uiLayer->getWidgetByName("btRankList");
-	m_btStart->addTouchEventListener(this,toucheventselector(GamesScence::btRankListCallback));
-
-	//帮助按钮
-	m_btStart = (UIButton*)m_uiLayer->getWidgetByName("btHelp");
-	m_btStart->addTouchEventListener(this,toucheventselector(GamesScence::btHelpCallback));
-
-	//离开游戏按钮
-	m_btStart = (UIButton*)m_uiLayer->getWidgetByName("btLeave");
-	m_btStart->addTouchEventListener(this,toucheventselector(GamesScence::btLeaveCallback));
-	
-	//排行榜
-	m_listRankList = (UIListView*)m_uiLayer->getWidgetByName("listRankList");
-	m_listRankList->setVisible(false);
-	m_listRankList->setTouchEnabled(false);
-	m_list = RankList::create(m_listRankList);
-	this->addChild(m_list);
-
-	//游戏菜单
-	m_menuPanel = (UIPanel*)m_uiLayer->getWidgetByName("layMenu");
 
 	//底板的纵横线
 	m_imgFrame = (UIImageView*)m_uiLayer->getWidgetByName("imgFrame");
 
-	//GameOver菜单
-	m_gamrOverPanel = (UIPanel*)m_uiLayer->getWidgetByName("layGameOver");
-	UIButton* restart = (UIButton*)m_uiLayer->getWidgetByName("btRestart");
-	restart->addTouchEventListener(this,toucheventselector(GamesScence::btRestartCallback));
-	setGameOverPanelVisible(false);
+	//提示难度
+	m_levelLabel = (UILabelAtlas*)m_uiLayer->getWidgetByName("atlLevel");
+	m_levelTip   = (UIImageView*)m_uiLayer->getWidgetByName("imgLevel");
 
 	//下一个方块的提示
 	m_nextTip = (UIImageView*)m_uiLayer->getWidgetByName("imgTip");
 
+	//游戏菜单
+	m_panelManager.setMenuPanel((UIPanel*)m_uiLayer->getWidgetByName("layMenu"));
+	m_panelManager.setMenuPanelVisible(false,true);
+	((UIButton*)m_uiLayer->getWidgetByName("btStart"))->addTouchEventListener(this,toucheventselector(GamesScence::btStartCallback));
+	((UIButton*)m_uiLayer->getWidgetByName("btContinue"))->addTouchEventListener(this,toucheventselector(GamesScence::btContinueCallback));
+	((UIButton*)m_uiLayer->getWidgetByName("btRankList"))->addTouchEventListener(this,toucheventselector(GamesScence::btRankListCallback));
+	((UIButton*)m_uiLayer->getWidgetByName("btHelp"))->addTouchEventListener(this,toucheventselector(GamesScence::btHelpCallback));
+	((UIButton*)m_uiLayer->getWidgetByName("btLeave"))->addTouchEventListener(this,toucheventselector(GamesScence::btLeaveCallback));
+
+	//GameOver菜单
+	m_panelManager.setGameOverPanel((UIPanel*)m_uiLayer->getWidgetByName("layGameOver"));
+	m_panelManager.setGameOverPanelVisible(false);
+	((UIButton*)m_uiLayer->getWidgetByName("btRestart"))->addTouchEventListener(this,toucheventselector(GamesScence::btRestartCallback));
+	
 	//上传分数面板
-	m_uploadScorePanel = (UIPanel*)m_uiLayer->getWidgetByName("layUploadScore");
-	m_nickNameInput = (UITextField*)m_uiLayer->getWidgetByName("tfNickName");
-	UIButton* btConfirmation = (UIButton*)m_uiLayer->getWidgetByName("btConfirmation");
-	btConfirmation->addTouchEventListener(this,toucheventselector(GamesScence::btConfirmationCallback));
-	UIButton* btCancel = (UIButton*)m_uiLayer->getWidgetByName("btCancel");
-	btCancel->addTouchEventListener(this,toucheventselector(GamesScence::btCancelCallback));
-	setUploadScorePanelVisible(0,false);
+	m_panelManager.setUploadScorePanel((UIPanel*)m_uiLayer->getWidgetByName("layUploadScore"));
+	m_panelManager.setUploadScorePanelVisible(0,false);
+	m_nickNameInput    = (UITextField*)m_uiLayer->getWidgetByName("tfNickName");
+	((UIButton*)m_uiLayer->getWidgetByName("btConfirmation"))->addTouchEventListener(this,toucheventselector(GamesScence::btConfirmationCallback));
+	((UIButton*)m_uiLayer->getWidgetByName("btCancel"))->addTouchEventListener(this,toucheventselector(GamesScence::btCancelCallback));
+	
+	//排行榜（只是显示用,与服务器的交互放m_list里实现）
+	UIListView* uilist = (UIListView*)m_uiLayer->getWidgetByName("listRankList");
+	m_panelManager.setRankList(uilist);
+	m_panelManager.setRankListVisible(false);
+
+	//真正与服务器交互的排行榜功能类
+	m_list = RankList::create(uilist);
+	this->addChild(m_list);
+	
 
 	//游戏底板
 	UIWidget* pFrame = m_uiLayer->getWidgetByName("imgFrame");
@@ -119,7 +105,7 @@ bool GamesScence::init()
 void GamesScence::setEffectMatrix()
 {
 	//效果矩阵的设置,苦力活
-	float norA    = 0.05f;
+	float norA    = 0.0f;
 	float targetA = 1.0f;
 
 	Matrix44 m0 = {
@@ -235,21 +221,12 @@ void GamesScence::setEffectMatrix()
 	FragmentEffect::getInstance()->addEffectMatrix(m13);
 }
 
-void GamesScence::closeCallback(CCObject* pSender)
-{
-	
-}
-
 void GamesScence::btStartCallback(CCObject* pSender,TouchEventType type)
 {
 	if(type == TOUCH_EVENT_ENDED)
 	{
-		m_bgBpard->start();
-		m_iGgameRunning = true;
-		setMenuVisible(false);
-
-		m_score = 0;
-		m_scoreLabel->setStringValue("0");
+		startGame();
+		setTipBoardVisible(true);
 	}
 }
 
@@ -257,12 +234,8 @@ void GamesScence::btRestartCallback(CCObject* pSender,TouchEventType type)
 {
 	if(type == TOUCH_EVENT_ENDED)
 	{
-		m_bgBpard->start();
-		m_iGgameRunning = true;
-		setGameOverPanelVisible(false);
-
-		m_score = 0;
-		m_scoreLabel->setStringValue("0");
+		startGame();
+		setTipBoardVisible(true);
 	}
 }
 
@@ -271,13 +244,13 @@ void GamesScence::btMenuCallback(CCObject* pSender,TouchEventType type)
 	if(type == TOUCH_EVENT_ENDED)
 	{
 		m_bgBpard->pasueDrop();
-		setMenuVisible(true);
-		setGameOverPanelVisible(false);
 
-		m_listRankList->setVisible(false);
-		m_listRankList->setTouchEnabled(false);
-		m_imgFrame->setVisible(true);
+		m_panelManager.setMenuPanelVisible(m_isGgameRunning,true);
+
 		m_bgBpard->setVisible(true);
+
+		setTipBoardVisible(false);
+		m_imgFrame->setVisible(true);
 	}
 }
 
@@ -286,8 +259,10 @@ void GamesScence::btContinueCallback(CCObject* pSender,TouchEventType type)
 	if(type == TOUCH_EVENT_ENDED)
 	{
 		m_bgBpard->continueDrop();
-		m_iGgameRunning = true;
-		setMenuVisible(false);
+		m_isGgameRunning = true;
+		m_panelManager.setMenuPanelVisible(m_isGgameRunning,false);
+		setTipBoardVisible(true);
+
 	}
 }
 
@@ -296,11 +271,10 @@ void GamesScence::btRankListCallback(CCObject* pSender,TouchEventType type)
 	if(type == TOUCH_EVENT_ENDED)
 	{
 		m_list->downloadRankList();
-		m_listRankList->setVisible(true);
-		m_listRankList->setTouchEnabled(true);
-		m_imgFrame->setVisible(false);
+		m_panelManager.setRankListVisible(true);
 		m_bgBpard->setVisible(false);
-		setMenuVisible(false);
+		setTipBoardVisible(false);
+		m_imgFrame->setVisible(false);
 	}
 }
 
@@ -308,7 +282,7 @@ void GamesScence::btHelpCallback(CCObject* pSender,TouchEventType type)
 {
 	if(type == TOUCH_EVENT_ENDED)
 	{
-		
+		setTipBoardVisible(false);
 	}
 }
 void GamesScence::btConfirmationCallback(CCObject* pSender,TouchEventType type)
@@ -324,7 +298,7 @@ void GamesScence::btCancelCallback(CCObject* pSender,TouchEventType type)
 {
 	if(type == TOUCH_EVENT_ENDED)
 	{
-		setUploadScorePanelVisible(0,false);
+		m_panelManager.setUploadScorePanelVisible(0,false);
 	}
 }
 
@@ -333,7 +307,7 @@ void GamesScence::uploadScoreResponse(bool b)
 	if(b)
 	{
 		CCMessageBox("OK!","OK");
-		setUploadScorePanelVisible(0,false);
+		m_panelManager.setGameOverPanelVisible(true);
 	}
 	else
 		CCMessageBox("Failure!","Failure");
@@ -353,6 +327,7 @@ void GamesScence::btLeaveCallback(CCObject* pSender,TouchEventType type)
 		#endif
 	}
 }
+
 void GamesScence::onAddScore(int numLineCleared)
 {
 	if(numLineCleared>0)
@@ -361,29 +336,47 @@ void GamesScence::onAddScore(int numLineCleared)
 		m_score+=(1<<numLineCleared);
 		sprintf(str,"%d",m_score);
 		m_scoreLabel->setStringValue(str);
+
+		m_clearLineCount += numLineCleared;
+
+		if(m_clearLineCount>10)
+		{
+			m_clearLineCount = 0;
+			m_level++;
+			sprintf(str,"%d",m_level);
+			m_levelLabel->setStringValue(str);
+			m_dropDelayTime = m_dropDelayTime/10.0f*8.0f;
+			m_bgBpard->setDropDelayTime(m_dropDelayTime);
+		}
 	}
 }
 
 void GamesScence::onNextBlock(int next)
 {
-	m_nextTip->setVisible(false);
 	if(m_nextTetromino)
 		m_uiLayer->getWidgetByName("root")->removeNode(m_nextTetromino);
 
-	m_nextTetromino = Tetromino::create(next,m_blockSize,"block.png");
-	m_nextTetromino->setPosition(m_nextTip->getPosition());
 
-	CCSize targetSize = m_nextTip->getContentSize();
-	m_nextTetromino->setScale(targetSize.width/4/m_blockSize);
+	m_nextTetromino = Tetromino::create(next,m_blockSize,"block.png");
+
+	float targetSize    = m_nextTip->getContentSize().width;
+	CCPoint targetPos   = m_nextTip->getPosition();
+	TetrominoSize tSize = m_nextTetromino->getTetrominoSize();
+
+	//位置偏移到中间
+	targetPos.x-=((targetSize-tSize._col*targetSize/4.0f)/2.0f);
+	targetPos.y+=((targetSize-tSize._row*targetSize/4.0f)/2.0f);
+
+	m_nextTetromino->setPosition(targetPos);
+	m_nextTetromino->setScale(targetSize/4.0f/m_blockSize);
 	
 	m_uiLayer->getWidgetByName("root")->addNode(m_nextTetromino,6);
 }
 
-
 void GamesScence::onGameOver()
 {
-	m_iGgameRunning = false;
-	setGameOverPanelVisible(true);
+	m_isGgameRunning = false;
+	m_panelManager.setGameOverPanelVisible(true);
 
 	int highestScore = CCUserDefault::sharedUserDefault()->getIntegerForKey("TheHighestScore",0);
 
@@ -399,71 +392,37 @@ void GamesScence::onGameOver()
 	HttpTool::getInstance()->getPosition(m_score,this,getPosition_selector(GamesScence::getPositionResponse));
 }
 
-void GamesScence::setGameOverPanelVisible(bool bVisible)
-{
-	m_gamrOverPanel->setVisible(bVisible);
-	for(int i =0 ; i<2 ; ++i)
-	{
-		UIWidget* pChild = (UIWidget*)m_gamrOverPanel->getChildByTag(i);
-		pChild->setVisible(bVisible);
-		pChild->setTouchEnabled(bVisible);
-	}
-}
-
-void GamesScence::setUploadScorePanelVisible(int position,bool bVisible)
-{
-	m_uploadScorePanel->setVisible(bVisible);
-	for(int i =0 ; i<3 ; ++i)
-	{
-		UIWidget* pChild = (UIWidget*)m_uploadScorePanel->getChildByTag(i);
-		pChild->setVisible(bVisible);
-		pChild->setTouchEnabled(bVisible);
-	}
-
-	if(bVisible)
-	{
-		char str[20];
-		sprintf(str,"%d",position);
-		((UILabelAtlas*)m_uploadScorePanel->getChildByTag(0))->setStringValue(str);
-	}
-}
-
-void GamesScence::setMenuVisible(bool bVisible)
-{
-	for(int i = 0 ; i<5 ; ++i)
-	{
-		UIWidget* pChild = (UIWidget*)m_menuPanel->getChildByTag(i);
-		pChild->setVisible(bVisible);
-		pChild->setTouchEnabled(bVisible);
-	}
-
-	m_btMenu->setTouchEnabled(!bVisible);
-	m_btMenu->setVisible(!bVisible);
-
-	if(bVisible && m_iGgameRunning)
-	{
-		UIWidget* pChild = (UIWidget*)m_menuPanel->getChildByTag(0);
-		pChild->setVisible(false);
-		pChild->setTouchEnabled(false);
-
-		pChild = (UIWidget*)m_menuPanel->getChildByTag(1);
-		pChild->setVisible(true);
-		pChild->setTouchEnabled(true);
-	}
-	else if(bVisible && !m_iGgameRunning)
-	{
-		UIWidget* pChild = (UIWidget*)m_menuPanel->getChildByTag(0);
-		pChild->setVisible(true);
-		pChild->setTouchEnabled(true);
-
-		pChild = (UIWidget*)m_menuPanel->getChildByTag(1);
-		pChild->setVisible(false);
-		pChild->setTouchEnabled(false);
-	}
-}
-
 void GamesScence::getPositionResponse(int position)
 {
 	if(position>0 && position<=100)
-		setUploadScorePanelVisible(position,true);
+		m_panelManager.setUploadScorePanelVisible(position,true);
+}
+
+void GamesScence::startGame()
+{
+	m_dropDelayTime  = 0.5f;
+	m_level          = 0;
+	m_clearLineCount = 0;
+	m_score          = 0;
+
+	m_bgBpard->start();
+	m_bgBpard->setDropDelayTime(m_dropDelayTime);
+	m_isGgameRunning = true;
+	m_panelManager.setGameOverPanelVisible(false);
+	m_panelManager.setMenuPanelVisible(m_isGgameRunning,false);
+
+	m_scoreLabel->setStringValue("0");
+	m_levelLabel->setStringValue("0");
+
+}
+
+void GamesScence::setTipBoardVisible(bool bVisible)
+{
+	m_levelTip->setVisible(!bVisible);
+	m_levelLabel->setVisible(bVisible);
+	
+	m_nextTip->setVisible(!bVisible);
+
+	if(m_nextTetromino)
+		m_nextTetromino->setVisible(bVisible);
 }

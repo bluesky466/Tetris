@@ -19,9 +19,7 @@
   <imageFileList>
     <string>TetrisUi0.plist</string>
   </imageFileList>
-  <imagePngList>
-    <string>TetrisUi0.png</string>
-  </imagePngList>
+  <imagePngList />
   <JsonSuffix>.json</JsonSuffix>
   <CurrentUIJson>TetrisUi.json</CurrentUIJson>
 </UIProject>

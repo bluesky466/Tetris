@@ -26,8 +26,8 @@ public:
 	///游戏开始,是重新开始的时候用,暂停后继续请用continueDrop
 	void start();
 
-	void pasueDrop();     ///<暂停游戏
-	void continueDrop();  ///<继续游戏
+	void pasueDrop();        ///<暂停游戏
+	void continueDrop();     ///<继续游戏
 
 	void curTetrominoMove(); ///<令当前的方块往下降落,是一个回调函数
 	void setNextTetromino(); ///<设置新的方块,是一个回调函数
@@ -76,7 +76,7 @@ private:
 	SEL_GameOver  m_gameOverCallback;
 	CCObject*     m_nextBlockListener;
 	SEL_NextBlock m_nextBlockCallback;
-
+	CCParticleSystemQuad* m_parSys;
 
 	int  clearLine();          ///<消除满方块的行
 	bool addToBg();            ///<将当前的方块加到底板标记数组中区

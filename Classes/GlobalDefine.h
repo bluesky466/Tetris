@@ -5,8 +5,6 @@
 #define BACKGROUND_COL 12
 #define BACKGROUND_ROW_CODE ((1<<BACKGROUND_COL)-1)
 #define BACKGROUND_ROW_MASK (~BACKGROUND_ROW_CODE)
-//#define BACKGROUND_ROW_MASK (~((1<<BACKGROUND_COL)-1))
-
 
 const int TetrominoShape[][4][4]=
 {

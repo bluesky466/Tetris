@@ -11,6 +11,12 @@
 
 USING_NS_CC;
 
+struct TetrominoSize
+{
+	int _row;
+	int _col;
+};
+
 /**
  * 七个形状的方块,包括当前位置的精灵和最后降落的位置的提示精灵
  * 注意：1、原点在右下角,数组的第零行在最底下
@@ -40,7 +46,7 @@ public:
 	int gotoTargetPos();
 
 	///得到大小
-	CCSize getTetrominoSize();
+	TetrominoSize getTetrominoSize();
 
 	///判断是否点击到方块上
 	bool isTouch(CCPoint worldCoord);
