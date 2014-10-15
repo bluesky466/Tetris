@@ -5,13 +5,14 @@
 #include "GlobalDefine.h"
 #include "Tetromino.h"
 #include "Block.h"
+#include <list>
 
 USING_NS_CC;
 
 typedef void (CCObject::*SEL_ClearLine)(int numLine);
 #define clearLine_selector(_SELECTOR) (SEL_ClearLine)(&_SELECTOR)
 
-typedef void (CCObject::*SEL_NextBlock)(int);
+typedef void (CCObject::*SEL_NextBlock)(int*);
 #define nextBlock_selector(_SELECTOR) (SEL_NextBlock)(&_SELECTOR)
 
 typedef void (CCObject::*SEL_GameOver)();
@@ -65,7 +66,7 @@ private:
 	bool  m_bAccMove;
 	int   m_blockSize;
 	int   m_bgInfo[BACKGROUND_ROW];
-	int   m_nextBlock;
+	std::list<int> m_next3Blocks;
 	CCPoint       m_touchPos;
 	CCNode*       m_blockSprRow[BACKGROUND_ROW];
 	Tetromino*    m_curTetromino;

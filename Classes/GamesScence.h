@@ -8,6 +8,7 @@
 #include "RankList.h"
 #include "Tetromino.h"
 #include "WidgetManager.h"
+#include <list>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -53,7 +54,7 @@ public:
     void onAddScore(int numLineCleared);
 
 	///提示下个方块的形状
-	void onNextBlock(int next);
+	void onNextBlock(int* next3Blocks);
 
 	///GameOver
 	void onGameOver();
@@ -78,29 +79,25 @@ private:
 	UILayer*         m_uiLayer;       ///<从cocostudio加载的游戏UI
 	UILabelAtlas*    m_scoreLabel;    ///<显示分数
 	UILabelAtlas*    m_highestLabel;  ///<显示最高分
-	UILabelAtlas*    m_levelLabel;    ///<提示难度
+	UILabelAtlas*    m_numCLearLabel; ///<提示消除了多少行
 	UIButton*        m_btMenu;        ///<菜单按钮
 	UITextField*     m_nickNameInput; ///<输入昵称的输入框
 	UIImageView*     m_imgFrame;      ///<游戏底板的纵横线
-	UIImageView*     m_levelTip;      ///<难度的提示底板
-	UIImageView*     m_nextTip;       ///<下一个方块的提示底板（只是提供一个位置和大小的信息）
-	Tetromino*       m_nextTetromino; ///<下一个方块的提示（显示形状）
 	RankList*        m_list;          ///<排行榜（功能类,与服务器的交互在这里实现）
+
+	std::list<Tetromino*> m_next3Tetrominos; ///<下三个方块的提示（显示形状）
 
 	int   m_score;          ///<分数
 	float m_blockSize;      ///<方块的大小（那些正方形的边长）
 	float m_dropDelayTime;  ///<方块每下降一格的延迟时间
-	int   m_level;          ///<难度
 	int   m_clearLineCount; ///<清除行的记数
 	bool  m_isGgameRunning; ///<游戏是否正在运行中（用于决定是开始游戏还是继续游戏）
-
+	CCPoint m_nextTipPos;       ///<下一个方块的提示位置
+	CCSize m_nextTipSize;      ///<下一个方块的提示大小
 	///设置各个形状的方块的颜色（用特性矩阵实现）
 	void setEffectMatrix();
 
 	void startGame();
-
-	///提示顶板的可见（若可见,则显示“提示”,“难度”这些字）
-	void setTipBoardVisible(bool bVisible);
 };
 
 #endif 

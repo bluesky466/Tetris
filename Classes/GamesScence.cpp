@@ -20,7 +20,7 @@ bool GamesScence::init()
 	m_score          = 0;
 	m_blockSize      = 20.0f;
 	m_isGgameRunning = false;
-	m_nextTetromino  = 0;
+	m_next3Tetrominos.clear();
 
 	setEffectMatrix();
 
@@ -46,12 +46,13 @@ bool GamesScence::init()
 	//底板的纵横线
 	m_imgFrame = (UIImageView*)m_uiLayer->getWidgetByName("imgFrame");
 
-	//提示难度
-	m_levelLabel = (UILabelAtlas*)m_uiLayer->getWidgetByName("atlLevel");
-	m_levelTip   = (UIImageView*)m_uiLayer->getWidgetByName("imgLevel");
+	//提示消除了多少行
+	m_numCLearLabel = (UILabelAtlas*)m_uiLayer->getWidgetByName("atlNumClear");
 
 	//下一个方块的提示
-	m_nextTip = (UIImageView*)m_uiLayer->getWidgetByName("imgTip");
+	UIImageView* nextTip = (UIImageView*)m_uiLayer->getWidgetByName("imgTipBoard");
+	m_nextTipPos  = nextTip->getPosition();
+	m_nextTipSize = nextTip->getContentSize();
 
 	//游戏菜单
 	m_panelManager.setMenuPanel((UIPanel*)m_uiLayer->getWidgetByName("layMenu"));
@@ -226,7 +227,6 @@ void GamesScence::btStartCallback(CCObject* pSender,TouchEventType type)
 	if(type == TOUCH_EVENT_ENDED)
 	{
 		startGame();
-		setTipBoardVisible(true);
 	}
 }
 
@@ -235,7 +235,6 @@ void GamesScence::btRestartCallback(CCObject* pSender,TouchEventType type)
 	if(type == TOUCH_EVENT_ENDED)
 	{
 		startGame();
-		setTipBoardVisible(true);
 	}
 }
 
@@ -249,7 +248,6 @@ void GamesScence::btMenuCallback(CCObject* pSender,TouchEventType type)
 
 		m_bgBpard->setVisible(true);
 
-		setTipBoardVisible(false);
 		m_imgFrame->setVisible(true);
 	}
 }
@@ -261,8 +259,6 @@ void GamesScence::btContinueCallback(CCObject* pSender,TouchEventType type)
 		m_bgBpard->continueDrop();
 		m_isGgameRunning = true;
 		m_panelManager.setMenuPanelVisible(m_isGgameRunning,false);
-		setTipBoardVisible(true);
-
 	}
 }
 
@@ -273,7 +269,6 @@ void GamesScence::btRankListCallback(CCObject* pSender,TouchEventType type)
 		m_list->downloadRankList();
 		m_panelManager.setRankListVisible(true);
 		m_bgBpard->setVisible(false);
-		setTipBoardVisible(false);
 		m_imgFrame->setVisible(false);
 	}
 }
@@ -282,7 +277,6 @@ void GamesScence::btHelpCallback(CCObject* pSender,TouchEventType type)
 {
 	if(type == TOUCH_EVENT_ENDED)
 	{
-		setTipBoardVisible(false);
 	}
 }
 void GamesScence::btConfirmationCallback(CCObject* pSender,TouchEventType type)
@@ -338,39 +332,85 @@ void GamesScence::onAddScore(int numLineCleared)
 		m_scoreLabel->setStringValue(str);
 
 		m_clearLineCount += numLineCleared;
+		sprintf(str,"%d",m_clearLineCount);
+		m_numCLearLabel->setStringValue(str);
 
-		if(m_clearLineCount>10)
-		{
-			m_clearLineCount = 0;
-			m_level++;
-			sprintf(str,"%d",m_level);
-			m_levelLabel->setStringValue(str);
-			m_dropDelayTime = m_dropDelayTime/10.0f*8.0f;
-			m_bgBpard->setDropDelayTime(m_dropDelayTime);
-		}
+		m_dropDelayTime = 0.2f - m_clearLineCount/10*0.015f;
+		m_bgBpard->setDropDelayTime(m_dropDelayTime);
+		
 	}
 }
 
-void GamesScence::onNextBlock(int next)
+void GamesScence::onNextBlock(int* next3Blocks)
 {
-	if(m_nextTetromino)
-		m_uiLayer->getWidgetByName("root")->removeNode(m_nextTetromino);
+	if(m_next3Tetrominos.size() == 0)
+	{
+		CCPoint pos = m_nextTipPos;
+		for(int i = 0 ; i<3 ; ++i)
+		{
+			Tetromino* t = Tetromino::create(next3Blocks[i],m_blockSize,"block.png");
 
+			float targetSize    = m_nextTipSize.width;
+			CCPoint targetPos   = pos;
+			TetrominoSize tSize = t->getTetrominoSize();
 
-	m_nextTetromino = Tetromino::create(next,m_blockSize,"block.png");
+			//位置偏移到中间
+			targetPos.x-=((targetSize-tSize._col*targetSize/4.0f)/2.0f);
+			targetPos.y+=((targetSize-tSize._row*targetSize/4.0f)/2.0f);
 
-	float targetSize    = m_nextTip->getContentSize().width;
-	CCPoint targetPos   = m_nextTip->getPosition();
-	TetrominoSize tSize = m_nextTetromino->getTetrominoSize();
-
-	//位置偏移到中间
-	targetPos.x-=((targetSize-tSize._col*targetSize/4.0f)/2.0f);
-	targetPos.y+=((targetSize-tSize._row*targetSize/4.0f)/2.0f);
-
-	m_nextTetromino->setPosition(targetPos);
-	m_nextTetromino->setScale(targetSize/4.0f/m_blockSize);
+			t->setPosition(targetPos);
+			t->setScale(targetSize/4.0f/m_blockSize);
 	
-	m_uiLayer->getWidgetByName("root")->addNode(m_nextTetromino,6);
+			m_uiLayer->getWidgetByName("root")->addNode(t,6);
+
+			pos.y-=m_nextTipSize.height;
+
+			m_next3Tetrominos.push_back(t);
+		}
+		
+	}
+	else
+	{
+		//从cocos渲染中消除下一个的提示
+		std::list<Tetromino*>::iterator i = m_next3Tetrominos.begin();
+		m_uiLayer->getWidgetByName("root")->removeChild(*i);
+
+		//之后的第二三的位置往上移动
+		i++;
+		(*i)->runAction(CCMoveBy::create(0.2f,ccp(0.0f,m_nextTipSize.height)));
+
+		i++;
+		(*i)->runAction(CCMoveBy::create(0.2f,ccp(0.0f,m_nextTipSize.height)));
+
+		//从队列中消除下一个的提示
+		m_next3Tetrominos.pop_front();
+
+		//新增一个提示,凑成三个
+		CCPoint pos = m_nextTipPos;
+		pos.y-=(2*m_nextTipSize.height);
+
+		Tetromino* t = Tetromino::create(next3Blocks[2],m_blockSize,"block.png");
+
+		float targetSize    = m_nextTipSize.width;
+		CCPoint targetPos   = pos;
+		TetrominoSize tSize = t->getTetrominoSize();
+
+		//位置偏移到中间
+		targetPos.x-=((targetSize-tSize._col*targetSize/4.0f)/2.0f);
+		targetPos.y+=((targetSize-tSize._row*targetSize/4.0f)/2.0f);
+
+		t->setPosition(targetPos);
+		t->setScale(targetSize/4.0f/m_blockSize);
+		
+		t->setVisible(false);
+		t->runAction(CCSequence::create(
+			CCDelayTime::create(0.2f),
+			CCShow::create(),
+			NULL));
+
+		m_uiLayer->getWidgetByName("root")->addNode(t,6);
+		m_next3Tetrominos.push_back(t);
+	}
 }
 
 void GamesScence::onGameOver()
@@ -401,7 +441,6 @@ void GamesScence::getPositionResponse(int position)
 void GamesScence::startGame()
 {
 	m_dropDelayTime  = 0.5f;
-	m_level          = 0;
 	m_clearLineCount = 0;
 	m_score          = 0;
 
@@ -412,17 +451,6 @@ void GamesScence::startGame()
 	m_panelManager.setMenuPanelVisible(m_isGgameRunning,false);
 
 	m_scoreLabel->setStringValue("0");
-	m_levelLabel->setStringValue("0");
+	m_numCLearLabel->setStringValue("0");
 
-}
-
-void GamesScence::setTipBoardVisible(bool bVisible)
-{
-	m_levelTip->setVisible(!bVisible);
-	m_levelLabel->setVisible(bVisible);
-	
-	m_nextTip->setVisible(!bVisible);
-
-	if(m_nextTetromino)
-		m_nextTetromino->setVisible(bVisible);
 }
