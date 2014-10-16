@@ -8,6 +8,7 @@
 #include "RankList.h"
 #include "Tetromino.h"
 #include "WidgetManager.h"
+#include "NumberCount.h"
 #include <list>
 
 USING_NS_CC;
@@ -77,9 +78,12 @@ private:
 	BackgroundBoard* m_bgBpard;       
 
 	UILayer*         m_uiLayer;       ///<从cocostudio加载的游戏UI
-	UILabelAtlas*    m_scoreLabel;    ///<显示分数
+	NumberCount      m_scoreCount;    ///<显示分数
+	NumberCount      m_clearCount;    ///<提示消除了多少行
+	//UILabelAtlas*    m_scoreLabel;    
+	//UILabelAtlas*    m_numCLearLabel;
 	UILabelAtlas*    m_highestLabel;  ///<显示最高分
-	UILabelAtlas*    m_numCLearLabel; ///<提示消除了多少行
+	
 	UIButton*        m_btMenu;        ///<菜单按钮
 	UITextField*     m_nickNameInput; ///<输入昵称的输入框
 	UIImageView*     m_imgFrame;      ///<游戏底板的纵横线

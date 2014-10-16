@@ -36,18 +36,17 @@ bool GamesScence::init()
 	m_highestLabel->setStringValue(strHighest);
 	
 	//分数显示
-	m_scoreLabel = (UILabelAtlas*)m_uiLayer->getWidgetByName("atlScore");
-	m_scoreLabel->setStringValue("0");
+	m_scoreCount.setNumberLabel((UILabelAtlas*)m_uiLayer->getWidgetByName("atlScore"));
 	
+	//提示消除了多少行
+	m_clearCount.setNumberLabel((UILabelAtlas*)m_uiLayer->getWidgetByName("atlNumClear"));
+
 	//菜单按钮
 	m_btMenu = (UIButton*)m_uiLayer->getWidgetByName("btMenu");
 	m_btMenu->addTouchEventListener(this,toucheventselector(GamesScence::btMenuCallback));
 
 	//底板的纵横线
 	m_imgFrame = (UIImageView*)m_uiLayer->getWidgetByName("imgFrame");
-
-	//提示消除了多少行
-	m_numCLearLabel = (UILabelAtlas*)m_uiLayer->getWidgetByName("atlNumClear");
 
 	//下一个方块的提示
 	UIImageView* nextTip = (UIImageView*)m_uiLayer->getWidgetByName("imgTipBoard");
@@ -326,16 +325,10 @@ void GamesScence::onAddScore(int numLineCleared)
 {
 	if(numLineCleared>0)
 	{
-		char str[10];
-		m_score+=(1<<numLineCleared);
-		sprintf(str,"%d",m_score);
-		m_scoreLabel->setStringValue(str);
+		m_scoreCount.increaseBy((1<<numLineCleared));
+		m_clearCount.increaseBy(numLineCleared);
 
-		m_clearLineCount += numLineCleared;
-		sprintf(str,"%d",m_clearLineCount);
-		m_numCLearLabel->setStringValue(str);
-
-		m_dropDelayTime = 0.2f - m_clearLineCount/10*0.015f;
+		m_dropDelayTime = 0.5f - m_clearLineCount/10*0.015f;
 		m_bgBpard->setDropDelayTime(m_dropDelayTime);
 		
 	}
@@ -377,10 +370,10 @@ void GamesScence::onNextBlock(int* next3Blocks)
 
 		//之后的第二三的位置往上移动
 		i++;
-		(*i)->runAction(CCMoveBy::create(0.2f,ccp(0.0f,m_nextTipSize.height)));
+		(*i)->runAction(CCMoveBy::create(0.3f,ccp(0.0f,m_nextTipSize.height)));
 
 		i++;
-		(*i)->runAction(CCMoveBy::create(0.2f,ccp(0.0f,m_nextTipSize.height)));
+		(*i)->runAction(CCMoveBy::create(0.3f,ccp(0.0f,m_nextTipSize.height)));
 
 		//从队列中消除下一个的提示
 		m_next3Tetrominos.pop_front();
@@ -404,7 +397,7 @@ void GamesScence::onNextBlock(int* next3Blocks)
 		
 		t->setVisible(false);
 		t->runAction(CCSequence::create(
-			CCDelayTime::create(0.2f),
+			CCDelayTime::create(0.3f),
 			CCShow::create(),
 			NULL));
 
@@ -450,7 +443,6 @@ void GamesScence::startGame()
 	m_panelManager.setGameOverPanelVisible(false);
 	m_panelManager.setMenuPanelVisible(m_isGgameRunning,false);
 
-	m_scoreLabel->setStringValue("0");
-	m_numCLearLabel->setStringValue("0");
-
+	m_scoreCount.setNumber(0);
+	m_clearCount.setNumber(0);
 }

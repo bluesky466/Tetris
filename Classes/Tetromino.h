@@ -26,7 +26,7 @@ class Tetromino : public CCNode
 {
 public:
 	Tetromino();
-
+	~Tetromino();
 	bool clockwiseRotate(const int* bgInfo);  ///<顺时针旋转
 	bool move(bool bLeft,const int* bgInfo);  ///<左右移动
 	bool drop(const int* bgInfo);             ///<下降
@@ -58,7 +58,12 @@ public:
 	bool isBesideTetromino(CCPoint worldCoord);
 	
 	///得到最终降落位置的提示方块的精灵
-	CCNode* getTargetBlockNode(const int* bgInfo,const char* fnBlockTexture);
+	//CCNode* getTargetBlockNode(const int* bgInfo,const char* fnBlockTexture);
+	///得到最终降落位置的提示方块的精灵
+	bool createTargetBlockNode(const int* bgInfo,const char* fnBlockTexture,CCNode* parent);
+	void removeTargetBlockNode();
+
+	void setTargetNodePos(const CCPoint& pos){m_targetBlockNode->setPosition(pos);}
 
 	bool init(int shape,float blockSize,const char* fnBlockTexture);
 
@@ -80,8 +85,8 @@ protected:
 	void setTargetBlockSprPos();      ///<方块最终降落位置的提示精灵的位置(节点坐标系中的)
 	bool testDrop(const int* bgInfo); ///<用于计算方块最终降落位置
 
-	///判断方块是否与底板的其他方块碰撞
-	bool isCollision(int col,int row,int rotate,const int* bgInfo);
+	///判断方块是否与底板的其他方块碰撞,返回值是左边或者右边碰撞了多少个正方形
+	int isCollision(int col,int row,int rotate,const int* bgInfo);
 };
 
 inline Tetromino::Tetromino():

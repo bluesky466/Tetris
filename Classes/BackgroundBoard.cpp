@@ -34,7 +34,6 @@ bool BackgroundBoard::init(float blockSize,char* fnBlockTex)
 	m_clearLineCallback = 0;
 	m_gameOverListener  = 0;
 	m_gameOverCallback  = 0;
-	m_targetBlock       = 0;
 	m_curTetromino      = 0;
 	m_nextBlockListener = 0;
 	m_nextBlockCallback = 0;
@@ -83,9 +82,8 @@ void BackgroundBoard::addNewTetromino()
 		m_curTetromino->runAction(pSqe);
 		this->addChild(m_curTetromino);
 
-		m_targetBlock = m_curTetromino->getTargetBlockNode(m_bgInfo,m_fnBlockTex);
+		m_curTetromino->createTargetBlockNode(m_bgInfo,m_fnBlockTex,this);
 		setTargetBlockPos();
-		this->addChild(m_targetBlock);
 	}
 	else
 	{
@@ -97,11 +95,11 @@ void BackgroundBoard::addNewTetromino()
 
 void BackgroundBoard::setTargetBlockPos()
 {
-	if(m_targetBlock)
+	if(m_curTetromino)
 	{
 		int col = m_curTetromino->getCol();
 		int row = m_curTetromino->getTargetRow();
-		m_targetBlock->setPosition(ccp(-m_blockSize*col,m_blockSize*row));
+		m_curTetromino->setTargetNodePos(ccp(-m_blockSize*col,m_blockSize*row));
 	}
 }
 
@@ -111,8 +109,8 @@ void BackgroundBoard::curTetrominoMove()
 	{
 		int col = m_curTetromino->getCol();
 		int row = m_curTetromino->getRow();
-		CCSequence* pSqe = CCSequence::create(CCDelayTime::create(m_dropDelayTime),
-											  CCMoveBy::create(0.1f,ccp(0.0f,-m_blockSize)), 
+		CCSequence* pSqe = CCSequence::create(CCMoveBy::create(0.1f,ccp(0.0f,-m_blockSize)), 
+											  CCDelayTime::create(m_dropDelayTime),
 											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::curTetrominoMove)),
 											  NULL);
 
@@ -121,7 +119,7 @@ void BackgroundBoard::curTetrominoMove()
 
 	else
 	{
-		CCSequence* pSeq = CCSequence::create(CCDelayTime::create(m_dropDelayTime),
+		CCSequence* pSeq = CCSequence::create(CCDelayTime::create(0.5f),
 											  CCCallFunc::create(this,callfunc_selector(BackgroundBoard::setNextTetromino)),
 											  NULL);
 		this->runAction(pSeq);
@@ -238,12 +236,6 @@ void BackgroundBoard::gotoTargetPos()
 	m_curTetromino->stopAllActions();
 	m_curTetromino->setPosition(ccp(-m_blockSize*col,m_blockSize*row));
 
-	if(m_targetBlock)
-	{
-		this->removeChild(m_targetBlock);
-		m_targetBlock = 0;
-	}
-
 	curTetrominoMove();
 }
 
@@ -252,12 +244,13 @@ void BackgroundBoard::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	CCPoint point = this->convertToNodeSpace(pTouch->getLocation());
 	if(m_bAccAction && 
 	   abs(point.x-m_touchPos.x)<m_blockSize &&
-	   abs(point.y-m_touchPos.y)<m_blockSize)
+	   abs(point.y-m_touchPos.y)<m_blockSize &&
+	   m_curTetromino->clockwiseRotate(m_bgInfo))
 	{
-
-		m_curTetromino->clockwiseRotate(m_bgInfo);
+		m_curTetromino->setPositionX(-m_curTetromino->getCol()*m_blockSize);
 		m_bAccAction = false;
 		setTargetBlockPos();
+		
 	}
 }
 
@@ -288,11 +281,7 @@ bool BackgroundBoard::addToBg()
 	if(row>=BACKGROUND_ROW)
 		return false;
 
-	if(m_targetBlock)
-	{
-		this->removeChild(m_targetBlock);
-		m_targetBlock = 0;
-	}
+	m_curTetromino->removeTargetBlockNode();
 
 	this->removeChild(m_curTetromino);
 	m_curTetromino = 0;

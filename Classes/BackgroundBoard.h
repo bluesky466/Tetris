@@ -70,7 +70,7 @@ private:
 	CCPoint       m_touchPos;
 	CCNode*       m_blockSprRow[BACKGROUND_ROW];
 	Tetromino*    m_curTetromino;
-	CCNode*       m_targetBlock;
+//	CCNode*       m_targetBlock;
 	CCObject*     m_clearLineListener;
 	SEL_ClearLine m_clearLineCallback;
 	CCObject*     m_gameOverListener;

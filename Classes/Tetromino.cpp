@@ -1,5 +1,9 @@
 #include "Tetromino.h"
 
+Tetromino::~Tetromino()
+{
+}
+
 Tetromino* Tetromino::create(int shape,float blockSize,const char* fnBlockTexture)
 {
 	Tetromino *pRet = new Tetromino(); 
@@ -51,7 +55,8 @@ bool Tetromino::clockwiseRotate(const int* bgInfo)
 	int rotateTest = m_rotate+1;
 	rotateTest%=4;
 
-	if(!isCollision(m_col,m_row,rotateTest,bgInfo))
+	int ret = isCollision(m_col,m_row,rotateTest,bgInfo);
+	if(ret==0)
 	{
 		m_rotate = rotateTest;
 
@@ -66,6 +71,49 @@ bool Tetromino::clockwiseRotate(const int* bgInfo)
 
 		return true;
 	}
+
+	int cloTest = m_col;
+	cloTest-=ret;
+
+	//左边碰到了往右移动
+	if(0==isCollision(cloTest,m_row,rotateTest,bgInfo))
+	{
+		m_col    = cloTest;
+		m_rotate = rotateTest;
+
+		m_targetRow = m_row;
+		while(testDrop(bgInfo))
+		{
+			;//空着就好
+		}
+
+		setBlockSprPos();
+		setTargetBlockSprPos();
+
+		return true;
+	}
+
+	cloTest = m_col;
+	cloTest+= ret;
+
+	//右边碰到了往左移动
+	if(0==isCollision(cloTest,m_row,rotateTest,bgInfo))
+	{
+		m_col    = cloTest;
+		m_rotate = rotateTest;
+
+		m_targetRow = m_row;
+		while(testDrop(bgInfo))
+		{
+			;//空着就好
+		}
+
+		setBlockSprPos();
+		setTargetBlockSprPos();
+
+		return true;
+	}
+	
 	return false;
 }
 
@@ -82,37 +130,81 @@ void Tetromino::setBlockSprPos()
 			}
 		}
 }
+//
+//CCNode* Tetromino::getTargetBlockNode(const int* bgInfo,const char* fnBlockTexture)
+//{
+//	if(!m_targetBlockNode)
+//	{
+//		m_targetBlockNode = CCNode::create();
+//
+//		for(int i = 0 ; i<4 ; ++i)
+//		{
+//			m_targetBlockSprite[i] = Block::create(fnBlockTexture);
+//
+//			if(m_targetBlockSprite[i]!=0)
+//			{
+//				m_targetBlockSprite[i]->setBlockSize(m_blockSize);
+//				m_targetBlockSprite[i]->setEffect(TargetTetrominoEffect(m_shape));
+//				m_targetBlockNode->addChild(m_targetBlockSprite[i]);
+//			}
+//			else
+//				return 0;
+//		}
+//
+//		setTargetBlockSprPos();
+//
+//		m_targetRow = m_row;
+//		while(testDrop(bgInfo))
+//		{
+//			;//空着就好
+//		}
+//	}
+//
+//	return m_targetBlockNode;
+//}
 
-CCNode* Tetromino::getTargetBlockNode(const int* bgInfo,const char* fnBlockTexture)
+bool Tetromino::createTargetBlockNode(const int* bgInfo,const char* fnBlockTexture,CCNode* parent)
 {
-	if(!m_targetBlockNode)
+	if(m_targetBlockNode)
+		m_targetBlockNode->removeFromParentAndCleanup(true);
+	
+	m_targetBlockNode = CCNode::create();
+
+	for(int i = 0 ; i<4 ; ++i)
 	{
-		m_targetBlockNode = CCNode::create();
+		m_targetBlockSprite[i] = Block::create(fnBlockTexture);
 
-		for(int i = 0 ; i<4 ; ++i)
+		if(m_targetBlockSprite[i]!=0)
 		{
-			m_targetBlockSprite[i] = Block::create(fnBlockTexture);
-
-			if(m_targetBlockSprite[i]!=0)
-			{
-				m_targetBlockSprite[i]->setBlockSize(m_blockSize);
-				m_targetBlockSprite[i]->setEffect(TargetTetrominoEffect(m_shape));
-				m_targetBlockNode->addChild(m_targetBlockSprite[i]);
-			}
-			else
-				return 0;
+			m_targetBlockSprite[i]->setBlockSize(m_blockSize);
+			m_targetBlockSprite[i]->setEffect(TargetTetrominoEffect(m_shape));
+			m_targetBlockNode->addChild(m_targetBlockSprite[i]);
 		}
-
-		setTargetBlockSprPos();
-
-		m_targetRow = m_row;
-		while(testDrop(bgInfo))
-		{
-			;//空着就好
-		}
+		else
+			return false;
 	}
 
-	return m_targetBlockNode;
+	setTargetBlockSprPos();
+
+	m_targetRow = m_row;
+	while(testDrop(bgInfo))
+	{
+		;//空着就好
+	}
+	
+
+	parent->addChild(m_targetBlockNode);
+
+	return true;
+}
+
+void Tetromino::removeTargetBlockNode()
+{
+	if(m_targetBlockNode)
+	{
+		m_targetBlockNode->removeFromParentAndCleanup(true);
+		m_targetBlockNode = 0;
+	}
 }
 
 void Tetromino::setTargetBlockSprPos()
@@ -175,25 +267,50 @@ bool Tetromino::testDrop(const int* bgInfo)
 	return false;
 }
 
-bool Tetromino::isCollision(int col,int row,int rotate,const int* bgInfo)
+int Tetromino::isCollision(int col,int row,int rotate,const int* bgInfo)
 {
 	if(row<0 || col<0)
 		return true;
 
-	int mask = BACKGROUND_ROW_MASK;
-
 	for(int r = 0 ;r<4 ; ++r)
 	{
+		int code = TetrominoShape[m_shape][rotate][r]<<col;
+
 		//左边出界
-		if((TetrominoShape[m_shape][rotate][r]<<col) & mask)
-			return true;
+		if(code & BACKGROUND_ROW_MASK)
+		{
+			//截取出界那几个方块
+			code&=BACKGROUND_ROW_MASK;
+
+			//将那几个出界的方块右移到最右边
+			code>>=BACKGROUND_COL;
+
+			//看看究竟有多少方块出界了
+			if(code >3)
+				return 3;
+			else if(code >1)
+				return 2;
+			else
+				return 1;
+		}
 
 		//和原来的方块重叠
-		if(row+r<BACKGROUND_ROW && (bgInfo[row+r] & (TetrominoShape[m_shape][rotate][r]<<col)))
-			return true;
+		if(row+r<BACKGROUND_ROW && (bgInfo[row+r] & code))
+		{
+			//截取碰撞的那几个方块
+			code&=bgInfo[row+r];
+
+			//将那几个碰撞的方块右移到最右边
+			code>>=col;
+
+			//看看究竟有多少方块碰撞了
+			int num = (code&1) + ((code>>1)&1) + ((code>>2)&1) + ((code>>3)&1);
+			
+			return num;
+		}
 	}
 
-	return false;
+	return 0;
 }
 
 
