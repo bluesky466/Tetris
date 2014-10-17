@@ -21,8 +21,6 @@ bool RankList::init(UIListView* list)
 	if(!CCNode::init())
 		return false;
 
-	HttpTool::getInstance()->getScoreList(this,getScoreList_selector(RankList::response));
-
 	m_list = list;
 
 	return true;

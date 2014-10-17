@@ -85,8 +85,10 @@ protected:
 	void setTargetBlockSprPos();      ///<方块最终降落位置的提示精灵的位置(节点坐标系中的)
 	bool testDrop(const int* bgInfo); ///<用于计算方块最终降落位置
 
-	///判断方块是否与底板的其他方块碰撞,返回值是左边或者右边碰撞了多少个正方形
-	int isCollision(int col,int row,int rotate,const int* bgInfo);
+	///判断方块是否与底板的其他方块碰撞
+	bool isCollision(int col,int row,int rotate,const int* bgInfo);
+
+	bool testRotate(int rotate,const int* bgInfo);
 };
 
 inline Tetromino::Tetromino():

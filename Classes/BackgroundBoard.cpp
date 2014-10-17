@@ -247,7 +247,10 @@ void BackgroundBoard::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	   abs(point.y-m_touchPos.y)<m_blockSize &&
 	   m_curTetromino->clockwiseRotate(m_bgInfo))
 	{
-		m_curTetromino->setPositionX(-m_curTetromino->getCol()*m_blockSize);
+		
+		m_curTetromino->setPosition(ccp(-m_curTetromino->getCol()*m_blockSize,
+										m_curTetromino->getRow()*m_blockSize));
+		
 		m_bAccAction = false;
 		setTargetBlockPos();
 		

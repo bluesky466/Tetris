@@ -50,13 +50,70 @@ bool Tetromino::init(int shape,float blockSize,const char* fnBlockTexture)
 	return true;
 }
 
+bool Tetromino::testRotate(int rotate,const int* bgInfo)
+{
+	int rowMove = 10,colMove = 10;
+
+	bool isbreak = false;
+	for(int r = 0 ; r<3 ; ++r)
+	{
+		for(int c = 1 ; c<4 ; ++c)
+		{
+			if(!isCollision(m_col+c,m_row+r,rotate,bgInfo))
+			{
+				colMove  = c;
+				rowMove  = r;
+
+				isbreak = true;
+				break;
+			}
+		}
+
+		//用goto感觉不太好
+		if(isbreak)
+			break;
+	}
+
+	isbreak = false;
+	for(int r = 0 ; r<3 ; ++r)
+	{
+		for(int c = 1 ; c<4 ; ++c)
+		{
+			if(!isCollision(m_col-c,m_row+r,rotate,bgInfo))
+			{
+				if(r+c<rowMove+colMove)
+				{
+					colMove = -c;
+					rowMove = r;
+				}
+
+				isbreak = true;
+				break;
+			}
+		}
+
+		//用goto感觉不太好
+		if(isbreak)
+			break;
+	}
+	
+	 if(rowMove != 10 || colMove != 10)
+	 {
+		 m_row += rowMove;
+		 m_col += colMove;
+		 m_rotate = rotate;
+		 return true;
+	 }
+
+	 return false;
+}
+
 bool Tetromino::clockwiseRotate(const int* bgInfo)
 {
 	int rotateTest = m_rotate+1;
 	rotateTest%=4;
 
-	int ret = isCollision(m_col,m_row,rotateTest,bgInfo);
-	if(ret==0)
+	if(!isCollision(m_col,m_row,rotateTest,bgInfo))
 	{
 		m_rotate = rotateTest;
 
@@ -71,49 +128,49 @@ bool Tetromino::clockwiseRotate(const int* bgInfo)
 
 		return true;
 	}
-
-	int cloTest = m_col;
-	cloTest-=ret;
-
-	//左边碰到了往右移动
-	if(0==isCollision(cloTest,m_row,rotateTest,bgInfo))
+	else
 	{
-		m_col    = cloTest;
-		m_rotate = rotateTest;
-
-		m_targetRow = m_row;
-		while(testDrop(bgInfo))
+		for(int r = 0 ; r<3 ; ++r)
 		{
-			;//空着就好
+			for(int c = 1 ; c<4 ; ++c)
+			{
+				if(!isCollision(m_col+c,m_row+r,rotateTest,bgInfo))
+				{
+					m_col  += c;
+					m_row  += r;
+					m_rotate = rotateTest;
+
+					m_targetRow = m_row;
+					while(testDrop(bgInfo))
+					{
+						;//空着就好
+					}
+
+					setBlockSprPos();
+					setTargetBlockSprPos();
+					return true;
+				}
+
+				else if(!isCollision(m_col-c,m_row+r,rotateTest,bgInfo))
+				{
+					m_col  -= c;
+					m_row  += r;
+					m_rotate = rotateTest;
+
+					m_targetRow = m_row;
+					while(testDrop(bgInfo))
+					{
+						;//空着就好
+					}
+
+					setBlockSprPos();
+					setTargetBlockSprPos();
+					return true;
+				}
+			}
 		}
-
-		setBlockSprPos();
-		setTargetBlockSprPos();
-
-		return true;
 	}
 
-	cloTest = m_col;
-	cloTest+= ret;
-
-	//右边碰到了往左移动
-	if(0==isCollision(cloTest,m_row,rotateTest,bgInfo))
-	{
-		m_col    = cloTest;
-		m_rotate = rotateTest;
-
-		m_targetRow = m_row;
-		while(testDrop(bgInfo))
-		{
-			;//空着就好
-		}
-
-		setBlockSprPos();
-		setTargetBlockSprPos();
-
-		return true;
-	}
-	
 	return false;
 }
 
@@ -267,50 +324,29 @@ bool Tetromino::testDrop(const int* bgInfo)
 	return false;
 }
 
-int Tetromino::isCollision(int col,int row,int rotate,const int* bgInfo)
+bool Tetromino::isCollision(int col,int row,int rotate,const int* bgInfo)
 {
 	if(row<0 || col<0)
 		return true;
 
-	for(int r = 0 ;r<4 ; ++r)
+	for(int r = 3 ;r>=0 ; --r)
 	{
 		int code = TetrominoShape[m_shape][rotate][r]<<col;
 
 		//左边出界
 		if(code & BACKGROUND_ROW_MASK)
 		{
-			//截取出界那几个方块
-			code&=BACKGROUND_ROW_MASK;
-
-			//将那几个出界的方块右移到最右边
-			code>>=BACKGROUND_COL;
-
-			//看看究竟有多少方块出界了
-			if(code >3)
-				return 3;
-			else if(code >1)
-				return 2;
-			else
-				return 1;
+			return true;
 		}
 
 		//和原来的方块重叠
 		if(row+r<BACKGROUND_ROW && (bgInfo[row+r] & code))
 		{
-			//截取碰撞的那几个方块
-			code&=bgInfo[row+r];
-
-			//将那几个碰撞的方块右移到最右边
-			code>>=col;
-
-			//看看究竟有多少方块碰撞了
-			int num = (code&1) + ((code>>1)&1) + ((code>>2)&1) + ((code>>3)&1);
-			
-			return num;
+			return true;
 		}
 	}
 
-	return 0;
+	return false;
 }
 
 

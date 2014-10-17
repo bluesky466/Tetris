@@ -105,118 +105,118 @@ bool GamesScence::init()
 void GamesScence::setEffectMatrix()
 {
 	//效果矩阵的设置,苦力活
-	float norA    = 0.0f;
-	float targetA = 1.0f;
+	float norA    = 1.0f;
+	float targetA = 0.2f;
 
 	Matrix44 m0 = {
-		0.4f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.1f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.1f, 0.0f,
-		0.0f, 0.0f, 0.0f, norA
+		0.4f*norA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.1f*norA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.1f*norA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*norA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m0);
 
 	Matrix44 m1 = {
-		0.1f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.4f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.1f, 0.0f,
-		0.0f, 0.0f, 0.0f, norA
+		0.1f*norA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.4f*norA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.1f*norA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*norA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m1);
 
 	Matrix44 m2 = {
-		0.1f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.1f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.4f, 0.0f,
-		0.0f, 0.0f, 0.0f, norA
+		0.1f*norA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.1f*norA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.4f*norA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*norA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m2);
 
 	Matrix44 m3 = {
-		0.1f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.4f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.4f, 0.0f,
-		0.0f, 0.0f, 0.0f, norA
+		0.1f*norA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.4f*norA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.4f*norA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*norA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m3);
 
 	Matrix44 m4 = {
-		0.4f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.1f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.4f, 0.0f,
-		0.0f, 0.0f, 0.0f, norA
+		0.4f*norA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.1f*norA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.4f*norA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*norA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m4);
 
 	Matrix44 m5 = {
-		1.0f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.4f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.2f, 0.0f,
-		0.0f, 0.0f, 0.0f, norA
+		1.0f*norA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.4f*norA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.2f*norA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*norA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m5);
 
 	Matrix44 m6 = {
-		0.6f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.7f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.7f, 0.0f,
-		0.0f, 0.0f, 0.0f, norA
+		0.6f*norA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.7f*norA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.7f*norA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*norA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m6);
 
 	Matrix44 m7 = {
-		0.8f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.2f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.2f, 0.0f,
-		0.0f, 0.0f, 0.0f, targetA
+		0.8f*targetA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.2f*targetA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.2f*targetA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*targetA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m7);
 
 	Matrix44 m8 = {
-		0.2f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.8f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.2f, 0.0f,
-		0.0f, 0.0f, 0.0f, targetA
+		0.2f*targetA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.8f*targetA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.2f*targetA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*targetA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m8);
 
 	Matrix44 m9 = {
-		0.2f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.2f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.8f, 0.0f,
-		0.0f, 0.0f, 0.0f, targetA
+		0.2f*targetA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.2f*targetA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.8f*targetA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*targetA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m9);
 
 	Matrix44 m10 = {
-		0.2f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.8f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.8f, 0.0f,
-		0.0f, 0.0f, 0.0f, targetA
+		0.2f*targetA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.8f*targetA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.8f*targetA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*targetA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m10);
 
 	Matrix44 m11 = {
-		0.8f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.2f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.8f, 0.0f,
-		0.0f, 0.0f, 0.0f, targetA
+		0.8f*targetA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.2f*targetA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.8f*targetA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*targetA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m11);
 
 	Matrix44 m12 = {
-		1.0f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.4f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.2f, 0.0f,
-		0.0f, 0.0f, 0.0f, targetA
+		1.0f*targetA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.4f*targetA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.2f*targetA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*targetA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m12);
 
 	Matrix44 m13 = {
-		0.6f, 0.0f, 0.0f, 0.0f,						
-		0.0f, 0.7f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.7f, 0.0f,
-		0.0f, 0.0f, 0.0f, targetA
+		0.6f*targetA, 0.0f, 0.0f, 0.0f,						
+		0.0f, 0.7f*targetA, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.7f*targetA, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f*targetA
 	};
 	FragmentEffect::getInstance()->addEffectMatrix(m13);
 }
