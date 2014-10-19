@@ -369,6 +369,7 @@ void BackgroundBoard::pasueDrop()
 	if(m_tetromino)
 	{
 		m_isPause = true;
+		this->pause();
 	}
 }
 
@@ -377,5 +378,6 @@ void BackgroundBoard::continueDrop()
 	if(m_tetromino)
 	{
 		m_isPause = false;
+		this->resume();
 	}
 }

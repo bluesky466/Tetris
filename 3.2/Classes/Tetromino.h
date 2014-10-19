@@ -36,6 +36,26 @@ public:
 	int getShape()     {return m_shape;}
 	int getTargetRow() {return m_targetRow;}  
 
+	void setCurBlockNodePos(const Vec2& position)
+	{
+		m_curBlockNode->setPosition(position);
+	}
+
+	void setCurBlockNodeScale(float scale)
+	{
+		m_curBlockNode->setScale(scale);
+	}
+
+	void setCurBlockNodeAction(Action* action)
+	{
+		m_curBlockNode->runAction(action);
+	}
+
+	void setCurBlockNodeVisible(bool bVisible)
+	{
+		m_curBlockNode->setVisible(bVisible);
+	}
+
 	///直接降落到可以降落的最底下的一行
 	int gotoTargetPos(const int* bgInfo);
 
