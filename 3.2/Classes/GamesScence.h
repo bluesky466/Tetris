@@ -2,14 +2,16 @@
 #define _GAME_SCENE_H_
 
 #include "cocos2d.h"
-#include "cocos2d\cocos\editor-support\cocostudio\CocoStudio.h"
+#include "editor-support\cocostudio\CocoStudio.h"
 #include "ui\CocosGUI.h"
+#include "network/HttpClient.h"
 #include "BackgroundBoard.h"
 #include "Tetromino.h"
 #include "GameLayoutManager.h"
 #include "NumberCount.h"
 #include "RankList.h"
 #include <list>
+#include "editor-support\cocostudio\DictionaryHelper.h"
 
 USING_NS_CC;
 using namespace ui;

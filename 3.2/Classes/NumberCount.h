@@ -2,7 +2,7 @@
 #define _NUMBER_COUNT_H_
 
 #include "cocos2d.h"
-#include "cocos2d\cocos\editor-support\cocostudio\CocoStudio.h"
+#include "editor-support\cocostudio\CocoStudio.h"
 #include "ui\CocosGUI.h"
 
 USING_NS_CC;

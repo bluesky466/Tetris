@@ -1,5 +1,4 @@
 #include "cocos2d.h"
-#include "cocos-ext.h"
 #include "network/HttpClient.h"
 #include "json/rapidjson.h"
 #include "json/document.h"
@@ -18,7 +17,7 @@ class HttpTool : public cocos2d::Ref
 public:
 	static HttpTool* getInstance();
 	static void destroy();
-
+	
 	HttpTool():
 		m_uploadScoreTarget(0),
 		m_uploadScoreSelector(0),
